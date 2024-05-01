@@ -1,40 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, Text, View } from 'react-native';
-import { db} from "./firebaseConfig.js";
-import { doc, getDoc, collection } from "firebase/firestore";
+import { getAPIKey } from "./getAPIKey.js";
 
 const Screen = () => {
 
-    const [apiKey, setApiKey] = useState("");
-    const [keys, setKeys] = useState([]);
+  const [key, setKey] = useState("")
+
+  const useAPIKey = async () => {
+    const value = await getAPIKey();
+    setKey(value)
     
-    const [text, onChangeText] = useState('some text');
+  };
 
-    useEffect(() => {
-      async function getData(){
-        const docRef = doc(db, "keys", "openai"); 
-        const docSnapshot = await getDoc(docRef);
-        const data = docSnapshot.data()
-        const singleValue = data.key; 
-        setApiKey(singleValue)
-      }
-      getData();
-    }, []); 
+  useAPIKey();
 
-    
-
-    return (
+  return (
       <View style={styles.container}>
-        <Text>Screen</Text>
-        <Text>{apiKey}</Text>
-
-        <TextInput
-        style={styles.input}
-        onChangeText={onChangeText}
-        value={text}
-      />
-
+        <Text>Screen get API key separately</Text>
+        <Text>{key}</Text>
       </View>
     );
   };
