@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, TextInput, Text, View } from 'react-native';
-import Screen from './Screen';
+import Game from './Game';
 
 const App = () => {
 
   return (
-    <Screen/>
+    <Game/>
   );
 };
 
