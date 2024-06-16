@@ -4,50 +4,62 @@ import ChatEngine from './ChatEngine';
 
 const Game = () => {
 
-  const maxAttempts = 3;
-  const [attempts, setAttempts] = useState(0)
+  const maxAttempts = 10;
+
+  const [attempts, setAttempts] = useState(0);
+  const [points, setPoints] = useState(0);
   const [guessList, setGuessList] = useState([]);
   const [inputGuess, setInputGuess] = useState('');
   const [responseText, setResponseText] = useState('');
+  const secretWord = "with child"
 
-  const renderItem = ({ item }) => (
-    <View style={styles.item}>
-      <Text style={styles.text}>{item}</Text>
-    </View>
-  );
-
-  const sendRequest = async () => {
+ const sendRequest = async () => {
     try {
-      const response = await ChatEngine(inputGuess);
-      setGuessList(guessList.concat(response))
-      setResponseText(response); 
-      if (attempts + 1 > maxAttempts){
-        alert("game over");
+      const response = await ChatEngine(inputGuess, secretWord );
+      if (response == "Yes") {
+        setPoints(10);
+        alert(`Game over. You won. Points:${points}`);
       } else {
-        setAttempts(attempts+1)
+        setGuessList(guessList.concat(inputGuess + ":" + response))
+        setResponseText(response); 
+        if (attempts + 1 > maxAttempts){
+
+          alert("Game over. You lost");
+        } else {
+          setAttempts(attempts+1)
+        }
       }
+
     } catch (error) {
       console.error('Error in sendRequest:', error);
       setResponseText('Error: Unable to fetch response');
     }
   };
 
+  const renderItem = ({ item }) => (
+    <View style={styles.guessItemStyle}>
+      <Text style={styles.guessTextStyle}>{item}</Text>
+    </View>
+  );
+
+
   return (
     <View style={styles.container}>
-      <Text style={styles.appTitle}>Elaborate</Text>
-      <Text style={styles.appTitle}>{attempts}/{maxAttempts}</Text>
-      <Text style={styles.secretWord}
+      <Text style={styles.attemptsCountStyle}>Attempts: {attempts}/{maxAttempts}</Text>
+      <Text style={styles.pointsCountStyle}>Points: {points}</Text>
+      <Text style={styles.secretWordStyle}
         adjustsFontSizeToFit={true}
-        numberOfLines={1}>SecretWord</Text>
+        numberOfLines={1}>{secretWord}</Text>
         <FlatList
         data={guessList}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
       />
       <TextInput
-        style={styles.input}
+        style={styles.inputStyle}
         placeholder="Type your message here"
         value={inputGuess}
+        autoCapitalize="none"
         onChangeText={setInputGuess}
       />
       <Button title="Send" onPress={sendRequest} />
@@ -60,46 +72,44 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    paddingTop: '20%',
+    paddingTop: '5%',
     backgroundColor: '#fff'
   },
-  appTitle: {
-    fontSize: 20,
-    marginBottom: 16
+  attemptsCountStyle: {
+    fontSize: 16,
+    marginBottom: 16,
+    fontWeight: "300"
   },
-  secretWord: {
+  pointsCountStyle: {
+    fontSize: 16,
+    marginBottom: 16,
+    fontWeight: "300"
+  },
+  secretWordStyle: {
     fontSize: 36,
     fontWeight: 'bold',
     marginBottom: 16,
-    textAlign: 'center',
-    fontFamily: 'TrebuchetMS-Bold'
+    marginTop: 16,
+    textAlign: 'center'
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16
-  },
-  input: {
-    height: 40,
+  inputStyle: {
+    height: "10%",
     borderColor: '#ccc',
     borderWidth: 1,
-    marginBottom: 16,
+    marginBottom: 45,
     paddingHorizontal: 8
-  },
-  responseContainer: {
-    marginTop: 16
   },
   response: {
     fontSize: 16,
     color: '#333'
   },
-  item: {
+  guessItemStyle: {
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
-  text: {
-    fontSize: 18,
+  guessTextStyle: {
+    fontSize: 14,
   },
 });
 
