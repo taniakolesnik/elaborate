@@ -1,29 +1,29 @@
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, TextInput, Text, View, Button, ScrollView } from 'react-native';
-import ChatEngine from './ChatEngine';
+import ChatGPTAPIClient from './ChatGPTAPIClient';
 
 const Game = () => {
 
-  const maxAttempts = 10;
+  const maxAttempts = 2;
 
   const [attempts, setAttempts] = useState(0);
   const [points, setPoints] = useState(0);
   const [guessList, setGuessList] = useState([]);
   const [inputGuess, setInputGuess] = useState('');
   const [responseText, setResponseText] = useState('');
-  const secretWord = "with child"
+  const secretWord = "tree"
+  const secretWordPOS = "noun"
 
  const sendRequest = async () => {
     try {
-      const response = await ChatEngine(inputGuess, secretWord );
+      const response = await ChatGPTAPIClient(inputGuess, secretWord );
       if (response == "Yes") {
         setPoints(10);
-        alert(`Game over. You won. Points:${points}`);
+        alert(`Game over. You won. Points:10`);
       } else {
-        setGuessList(guessList.concat(inputGuess + ":" + response))
+        setGuessList(guessList.concat(inputGuess + " : " + response))
         setResponseText(response); 
         if (attempts + 1 > maxAttempts){
-
           alert("Game over. You lost");
         } else {
           setAttempts(attempts+1)
@@ -50,6 +50,7 @@ const Game = () => {
       <Text style={styles.secretWordStyle}
         adjustsFontSizeToFit={true}
         numberOfLines={1}>{secretWord}</Text>
+        <Text style={styles.secretWordPOSStyle}>{secretWordPOS}</Text>
         <FlatList
         data={guessList}
         renderItem={renderItem}
@@ -88,15 +89,19 @@ const styles = StyleSheet.create({
   secretWordStyle: {
     fontSize: 36,
     fontWeight: 'bold',
-    marginBottom: 16,
     marginTop: 16,
+    textAlign: 'center'
+  },
+  secretWordPOSStyle: {
+    fontSize: 12,
+    marginBottom: 5,
+    marginTop: 5,
     textAlign: 'center'
   },
   inputStyle: {
     height: "10%",
     borderColor: '#ccc',
     borderWidth: 1,
-    marginBottom: 45,
     paddingHorizontal: 8
   },
   response: {

@@ -4,15 +4,14 @@ import {
     MenuOption,
     MenuTrigger,
   } from 'react-native-popup-menu';
-  import { StyleSheet, TextInput, Text, View } from 'react-native';
+  import { View } from 'react-native';
   
-  export const MenuScreen = () => (
+  export const MenuScreen = ({onNewGameClick}) => (
     <View>
       <Menu>
         <MenuTrigger text={'⋮'} />
         <MenuOptions>
-          <MenuOption onSelect={() => alert(`Give up`)} text='Give Up' />
-          <MenuOption onSelect={() => alert(`Delete`)} text='Delete' />
+          <MenuOption onSelect={() => onNewGameClick()} text='New game' />
         </MenuOptions>
       </Menu>
     </View>
