@@ -5,7 +5,7 @@ const ChatGPTAPIClient = async (inputMessage, secretWord) => {
   const apiURL = 'https://api.openai.com/v1/chat/completions';
   const apiKey = await getAPIKey();
   const userContent = "what is common between '" + secretWord + "' and '" + inputMessage + "'?"; 
-  const systemContent = "in a few words. one thing only. no examples. starting with 'they both have...' or 'they both are made' etc"
+  const systemContent = "if '" + inputMessage + "' means '" + secretWord + "', reply 'yes' and stop. otherrwise, in a few words. one thing only. no examples. starting with 'they both have...' or 'they both are made' etc"
 
   console.log(userContent)
 
