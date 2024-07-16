@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, TextInput, Text, View, Button, ScrollView } from 'react-native';
 import ChatGPTAPIClient from './ChatGPTAPIClient';
+import BigHugeLabsAPIClient from './BigHugeLabsAPIClient'
 
 const Game = () => {
 
@@ -16,7 +17,7 @@ const Game = () => {
 
  const sendRequest = async () => {
     try {
-      const response = await ChatGPTAPIClient(inputGuess, secretWord );
+      const response = await BigHugeLabsAPIClient(inputGuess, secretWord );
       if (response == "Yes") {
         setPoints(10);
         alert(`Game over. You won. Points:10`);
