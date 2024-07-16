@@ -3,9 +3,8 @@ import { getAPIKey } from "./getAPIKey.js";
 
 const ChatGPTAPIClient = async (inputMessage, secretWord) => {
   const apiURL = 'https://api.openai.com/v1/chat/completions';
-  const apiKey = await getAPIKey();
-  const userContent = "what is common between '" + secretWord + "' and '" + inputMessage + "'?"; 
-  const systemContent = "if '" + inputMessage + "' means '" + secretWord + "', reply 'yes' and stop. otherrwise, in a few words. one thing only. no examples. starting with 'they both have...' or 'they both are made' etc"
+  const apiKey = await getAPIKey("openai");
+  const userContent = "does '" + secretWord + "' mean '" + inputMessage + "'? reply first \"yes\" or \"no\". then, if \"yes\" - just stop. if \"no\", say what one they both have in common semantically. briefly."; 
 
   console.log(userContent)
 
@@ -17,7 +16,6 @@ const ChatGPTAPIClient = async (inputMessage, secretWord) => {
       {
         model: "gpt-3.5-turbo",
         messages: [
-          {role: "system", content: systemContent},
           {role: "user", content: userContent}
         ],
         temperature: 0,  
