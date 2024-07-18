@@ -5,17 +5,17 @@ import BigHugeLabsAPIDataParser from "./BigHugeLabsAPIDataParser"
 
 const BigHugeLabsAPIClient = async (inputMessage, secretWord) => {
   
-let apiKey = null;
+ let apiKey = null;
 
  const getAPIKey = async (apiClient) => {
     if (!apiKey) {
       apiKey = await fetchAPIKey(apiClient);
     }
-    console.log(apiKey)
     return apiKey;
   };
   
   apiKey = await getAPIKey("bighugelabsapi");
+  // console.log("BigHugeLabs:" + apiKey)
 
   const getList = async (word) => {
     apiURL = `https://words.bighugelabs.com/api/2/${apiKey}/${word}`

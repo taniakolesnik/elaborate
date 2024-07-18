@@ -1,11 +1,21 @@
 import axios from 'axios';
-import GetAPIKey from "./GetAPIKey";
-import BigHugeLabsAPIDataParser from "./BigHugeLabsAPIDataParser"
+import { fetchAPIKey } from "./getAPIKey.js";
+import BigHugeLabsAPIDataParser from "./BigHugeLabsAPIDataParser.js"
 
-const getRandom = async () => {
+const RandomWord = async () => {
 
-    const apiKey = await GetAPIKey("wordsapi");
     const apiURL = "https://wordsapiv1.p.rapidapi.com/words/?random=true"
+
+    let apiKey = null;
+
+    const getAPIKey = async (apiClient) => {
+       if (!apiKey) {
+         apiKey = await fetchAPIKey(apiClient);
+       }
+       return apiKey;
+     };
+     
+     apiKey = await getAPIKey("wordsapi");
 
 
     // code take from https://rapidapi.com/guides/use-axios-for-api-requests
@@ -20,10 +30,10 @@ const getRandom = async () => {
                     }
                 }
             );
-
-            console.log(res.data.word)
+            return res.data.word
         } catch (err) {
             console.log(err);
+            return "error"
         }
     };
 
@@ -34,4 +44,4 @@ const getRandom = async () => {
 
 
 
-export default getRandom;
+export default RandomWord;

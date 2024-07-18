@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, TextInput, Text, View, Button, ScrollView } from 'react-native';
-import ChatGPTAPIClient from './ChatGPTAPIClient';
+import RandomWord from './RandomWord'
 import BigHugeLabsAPIClient from './BigHugeLabsAPIClient'
 
 const Game = () => {
@@ -12,10 +12,9 @@ const Game = () => {
   const [guessList, setGuessList] = useState([]);
   const [inputGuess, setInputGuess] = useState('');
   const [responseText, setResponseText] = useState('');
-  const secretWord = "tree"
-  const secretWordPOS = "noun"
+  const [secretWord, setSecretWord] = useState('');
 
- const sendRequest = async () => {
+  const sendRequest = async () => {
     try {
       const response = await BigHugeLabsAPIClient(inputGuess, secretWord );
       if (response == "Yes") {
@@ -37,6 +36,21 @@ const Game = () => {
     }
   };
 
+  const getRandomWord = async () => {
+    try {
+      const response = await RandomWord();
+      if (response[0].length == 0) {
+        alert(`no random word catches`);
+      } else {
+        setSecretWord(response)
+      }
+
+    } catch (error) {
+      console.error('Error in sendRequest:', error);
+      setResponseText('Error: Unable to fetch response');
+    }
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.guessItemStyle}>
       <Text style={styles.guessTextStyle}>{item}</Text>
@@ -46,12 +60,13 @@ const Game = () => {
 
   return (
     <View style={styles.container}>
+
+      <Button title="Send" onPress={getRandomWord} />
       <Text style={styles.attemptsCountStyle}>Attempts: {attempts}/{maxAttempts}</Text>
       <Text style={styles.pointsCountStyle}>Points: {points}</Text>
       <Text style={styles.secretWordStyle}
         adjustsFontSizeToFit={true}
         numberOfLines={1}>{secretWord}</Text>
-        <Text style={styles.secretWordPOSStyle}>{secretWordPOS}</Text>
         <FlatList
         data={guessList}
         renderItem={renderItem}
