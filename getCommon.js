@@ -8,8 +8,7 @@ const getCommon = async (wordOne, wordTwo) => {
     const listOne = await getSynonyms(wordOne);
     const listTwo = await getSynonyms(wordTwo);
 
-    alert(listTwo)
-    
+    alert(listOne)
 
   } catch (error) {
     console.error('Error in getCommon:', error);
