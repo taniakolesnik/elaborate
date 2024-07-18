@@ -7,6 +7,8 @@ const RandomWord = async () => {
     const apiURL = "https://wordsapiv1.p.rapidapi.com/words/?random=true"
 
     let apiKey = null;
+    let isFound = false;
+    let reply = null;
 
     const getAPIKey = async (apiClient) => {
        if (!apiKey) {
@@ -19,7 +21,7 @@ const RandomWord = async () => {
 
 
     // code take from https://rapidapi.com/guides/use-axios-for-api-requests
-    const getWord = async () => {
+    const getWordData = async () => {
         try {
             const res = await axios.get(
                 apiURL,
@@ -30,14 +32,23 @@ const RandomWord = async () => {
                     }
                 }
             );
-            return res.data.word
+            return res.data
         } catch (err) {
             console.log(err);
             return "error"
         }
     };
 
-    const reply = await getWord()
+
+    while (!isFound) {
+        const data = await getWordData();
+        if (data.results && data.results.length > 0) {
+            isFound = true
+            reply = data.word
+        } else {
+            console.log(data.word + " does not have results section. continue searching")
+        }
+    }
     return reply
 }
 
