@@ -3,7 +3,7 @@ import axios from 'axios';
 import { fetchAPIKey } from "./getAPIKey.js";
 import BigHugeLabsAPIDataParser from "./BigHugeLabsAPIDataParser"
 
-const BigHugeLabsAPIClient = async (inputMessage, secretWord) => {
+const BigHugeLabsAPIClient = async (word) => {
   
  let apiKey = null;
 
@@ -31,7 +31,7 @@ const BigHugeLabsAPIClient = async (inputMessage, secretWord) => {
     }
   }
 
-  return await getList(inputMessage)
+  return await getList(word)
 
 };
 

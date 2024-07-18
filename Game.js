@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, TextInput, Text, View, Button, ScrollView } from 'react-native';
-import RandomWord from './RandomWord'
-import BigHugeLabsAPIClient from './BigHugeLabsAPIClient'
+import getRandomWord from './getRandomWord'
+import getCommon from './getCommon';
+import getSynonyms from './getSynonyms';
 
 const Game = () => {
 
@@ -11,22 +12,45 @@ const Game = () => {
   const [points, setPoints] = useState(0);
   const [guessList, setGuessList] = useState([]);
   const [inputGuess, setInputGuess] = useState('');
-  const [responseText, setResponseText] = useState('');
   const [secretWord, setSecretWord] = useState('');
 
   useEffect(() => {
-    getRandomWord();
+    setRandomWord();
   }, []);
 
-  const sendRequest = async () => {
+
+  // const getList = async () => {
+  //   try {
+  //     const response = await getSynonyms(inputGuess);
+  //     alert(response);
+
+  //   } catch (error) {
+  //     console.error('Error in getList:', error);
+  //   }
+  // };
+
+  const setRandomWord = async () => {
     try {
-      const response = await BigHugeLabsAPIClient(inputGuess, secretWord );
+      const response = await getRandomWord();
+      if (response[0].length == 0) {
+        alert(`no random word catches`);
+      } else {
+        setSecretWord(response)
+      }
+
+    } catch (error) {
+      console.error('Error in setRandomWord:', error);
+    }
+  };
+
+  const checkGuessInput = async () => {
+    try {
+      const response = await getCommon(inputGuess, secretWord);
       if (response == "Yes") {
         setPoints(10);
         alert(`Game over. You won. Points:10`);
       } else {
         setGuessList(guessList.concat(inputGuess + " : " + response))
-        setResponseText(response); 
         if (attempts + 1 > maxAttempts){
           alert("Game over. You lost");
         } else {
@@ -36,22 +60,6 @@ const Game = () => {
 
     } catch (error) {
       console.error('Error in sendRequest:', error);
-      setResponseText('Error: Unable to fetch response');
-    }
-  };
-
-  const getRandomWord = async () => {
-    try {
-      const response = await RandomWord();
-      if (response[0].length == 0) {
-        alert(`no random word catches`);
-      } else {
-        setSecretWord(response)
-      }
-
-    } catch (error) {
-      console.error('Error in sendRequest:', error);
-      setResponseText('Error: Unable to fetch response');
     }
   };
 
@@ -64,7 +72,6 @@ const Game = () => {
 
   return (
     <View style={styles.container}>
-
       <Text style={styles.attemptsCountStyle}>Attempts: {attempts}/{maxAttempts}</Text>
       <Text style={styles.pointsCountStyle}>Points: {points}</Text>
       <Text style={styles.secretWordStyle}
@@ -82,7 +89,7 @@ const Game = () => {
         autoCapitalize="none"
         onChangeText={setInputGuess}
       />
-      <Button title="Send" onPress={sendRequest} />
+      <Button title="Send" onPress={checkGuessInput} />
 
     </View>
   );
