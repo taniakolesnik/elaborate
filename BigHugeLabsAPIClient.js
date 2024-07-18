@@ -19,7 +19,7 @@ const BigHugeLabsAPIClient = async (inputMessage, secretWord) => {
       return 'Error: Unable to fetch response';
     }
   }
-s
+
   return await getList(inputMessage)
 
 };
