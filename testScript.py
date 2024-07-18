@@ -60,7 +60,7 @@ def run_check(list_one, list_two):
             continue
         list_two = list(set(list_two + sub_list))
 
-    # run_check(list_one, list_two)
+    run_check(list_one, list_two)
 
 word_one = 'makeup'
 word_two = 'table'

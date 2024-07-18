@@ -1,12 +1,22 @@
 import axios from 'axios';
-import { getAPIKey } from "./getAPIKey.js";
+import { fetchAPIKey } from "./getAPIKey.js";
 
 const ChatGPTAPIClient = async (inputMessage, secretWord) => {
   const apiURL = 'https://api.openai.com/v1/chat/completions';
-  const apiKey = await getAPIKey("openai");
-  const userContent = "does '" + secretWord + "' mean '" + inputMessage + "'? reply first \"yes\" or \"no\". then, if \"yes\" - just stop. if \"no\", say what one they both have in common semantically. briefly."; 
+  const userContent = "does '" + inputMessage + "' mean '" + secretWord + "' ? if yes, just reply 'yes' and stop. if not exactly, what is common between '" + secretWord + "' and '" + inputMessage + "'? in a few words"; 
 
   console.log(userContent)
+
+  let apiKey = null;
+
+  const getAPIKey = async (apiClient) => {
+     if (!apiKey) {
+       apiKey = await fetchAPIKey(apiClient);
+     }
+     return apiKey;
+   };
+   
+   apiKey = await getAPIKey("openai");
 
 
   try {
@@ -14,8 +24,9 @@ const ChatGPTAPIClient = async (inputMessage, secretWord) => {
 
       apiURL,
       {
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o-mini",
         messages: [
+          {role: "system", content: "you are helping user to guess a word meaning without giving meaning of '" + secretWord + "'. if user guessed the meaning or synonyms, just reply 'yes'"},
           {role: "user", content: userContent}
         ],
         temperature: 0,  

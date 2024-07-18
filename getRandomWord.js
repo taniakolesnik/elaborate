@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { fetchAPIKey } from "./getAPIKey.js";
-import BigHugeLabsAPIDataParser from "./BigHugeLabsAPIDataParser.js"
 
-const RandomWord = async () => {
+const getRandomWord = async () => {
 
-    const apiURL = "https://wordsapiv1.p.rapidapi.com/words/?random=true"
+    const apiURL = "https://wordsapiv1.p.rapidapi.com/words/?random=true&lettersMin=7&lettersMax=12&partOfSpeech=verb&frequencyMin=2.5"
 
     let apiKey = null;
     let isFound = false;
@@ -46,13 +45,10 @@ const RandomWord = async () => {
             isFound = true
             reply = data.word
         } else {
-            console.log(data.word + " does not have results section. continue searching")
+            console.log("RandomWord: " + data.word + " does not have results section. continue searching")
         }
     }
     return reply
 }
 
-
-
-
-export default RandomWord;
+export default getRandomWord;

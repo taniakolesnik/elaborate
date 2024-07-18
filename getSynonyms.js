@@ -37,11 +37,8 @@ const getSynonyms = async (word) => {
         }
     };
 
-    console.log("getSynonyms word: " + word)
     const data = await getList(word);
-    console.log("getSynonyms: data " + data)
     const synonyms = parseSynonyms(data)
-    console.log("getSynonyms: synonyms " + synonyms)
     return synonyms;
 
 };

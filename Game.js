@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, TextInput, Text, View, Button, ScrollView } from 'react-native';
 import getRandomWord from './getRandomWord'
-import getCommon from './getCommon';
-import getSynonyms from './getSynonyms';
+// import getCommon from './getCommon';
+// import getSynonyms from './getSynonyms';
+import ChatGPTAPIClient from './ChatGPTAPIClient';
 
 const Game = () => {
 
-  const maxAttempts = 2;
+  const maxAttempts = 10;
 
   const [attempts, setAttempts] = useState(0);
   const [points, setPoints] = useState(0);
@@ -17,17 +18,6 @@ const Game = () => {
   useEffect(() => {
     setRandomWord();
   }, []);
-
-
-  // const getList = async () => {
-  //   try {
-  //     const response = await getSynonyms(inputGuess);
-  //     alert(response);
-
-  //   } catch (error) {
-  //     console.error('Error in getList:', error);
-  //   }
-  // };
 
   const setRandomWord = async () => {
     try {
@@ -45,7 +35,7 @@ const Game = () => {
 
   const checkGuessInput = async () => {
     try {
-      const response = await getCommon(inputGuess, secretWord);
+      const response = await ChatGPTAPIClient(inputGuess, secretWord);
       if (response == "Yes") {
         setPoints(10);
         alert(`Game over. You won. Points:10`);

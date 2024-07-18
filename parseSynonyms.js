@@ -2,7 +2,7 @@ import React from 'react';
 
 const parseSynonyms = (data) => {
 
-  console.log("parseSynonyms" + data)
+
   const synonymsSet = new Set();
 
   
