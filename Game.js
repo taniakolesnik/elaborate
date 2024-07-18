@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, TextInput, Text, View, Button, ScrollView } from 'react-native';
 import RandomWord from './RandomWord'
 import BigHugeLabsAPIClient from './BigHugeLabsAPIClient'
@@ -13,6 +13,10 @@ const Game = () => {
   const [inputGuess, setInputGuess] = useState('');
   const [responseText, setResponseText] = useState('');
   const [secretWord, setSecretWord] = useState('');
+
+  useEffect(() => {
+    getRandomWord();
+  }, []);
 
   const sendRequest = async () => {
     try {
@@ -61,7 +65,6 @@ const Game = () => {
   return (
     <View style={styles.container}>
 
-      <Button title="Send" onPress={getRandomWord} />
       <Text style={styles.attemptsCountStyle}>Attempts: {attempts}/{maxAttempts}</Text>
       <Text style={styles.pointsCountStyle}>Points: {points}</Text>
       <Text style={styles.secretWordStyle}
