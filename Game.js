@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, StyleSheet, TextInput, Text, View, Button, ScrollView } from 'react-native';
+import { FlatList, ActivityIndicator, StyleSheet, TextInput, Text, View, Button } from 'react-native';
 import getRandomWord from './getRandomWord'
 import getCommon from './getCommon';
 
@@ -9,6 +9,7 @@ const Game = () => {
   const [guessList, setGuessList] = useState([]);
   const [inputGuess, setInputGuess] = useState('');
   const [isDisabledSendButton, setIsDisabledSendButton] = useState(true);
+  const [isEnabledActivityIndicator, setIsEnabledActivityIndicator] = useState(false);
   const [secretWord, setSecretWord] = useState('');
 
   useEffect(() => {
@@ -40,13 +41,18 @@ const Game = () => {
   };
 
   const checkGuessInput = async () => {
+    setIsEnabledActivityIndicator(true);
+    setIsDisabledSendButton(true)
     if (secretWord == inputGuess){
       alert(`You won! Secret word is ${secretWord}`);
+      setIsEnabledActivityIndicator(false)
     } else {
       const response = await getCommon(inputGuess, secretWord);
       setGuessList(guessList.concat(inputGuess + " : " + response))
       setAttempts(attempts+1)
       setInputGuess("");
+      setIsEnabledActivityIndicator(false);
+      setIsEnabledActivityIndicator(false)
     }
   };
 
@@ -61,6 +67,9 @@ const Game = () => {
     <View style={styles.container}>
       <Text style={styles.attemptsCountStyle}>Attempts: {attempts}</Text>
       {/* <Text style={styles.secretWordStyle}>{secretWord}</Text> */}
+      <View style={styles.activityIndicatorStyle}>
+        <ActivityIndicator animating={isEnabledActivityIndicator} size="large" />
+      </View>
         <FlatList
         data={guessList}
         renderItem={renderItem}
@@ -84,7 +93,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     paddingTop: '5%',
-    backgroundColor: '#fff'
+    paddingBottom:'10%',
+    backgroundColor: '#fff',
+    justifyContent: 'center'
   },
   attemptsCountStyle: {
     fontSize: 16,
@@ -104,6 +115,11 @@ const styles = StyleSheet.create({
   },
   guessTextStyle: {
     fontSize: 14,
+  },
+  activityIndicatorStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
   },
 });
 
