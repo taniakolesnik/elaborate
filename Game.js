@@ -5,10 +5,7 @@ import getCommon from './getCommon';
 
 const Game = () => {
 
-  const maxAttempts = 10;
-
   const [attempts, setAttempts] = useState(0);
-  const [points, setPoints] = useState(0);
   const [guessList, setGuessList] = useState([]);
   const [inputGuess, setInputGuess] = useState('');
   const [isDisabledSendButton, setIsDisabledSendButton] = useState(true);
@@ -60,8 +57,7 @@ const Game = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.attemptsCountStyle}>Attempts: {attempts}/{maxAttempts}</Text>
-      <Text style={styles.pointsCountStyle}>Points: {points}</Text>
+      <Text style={styles.attemptsCountStyle}>Attempts: {attempts}</Text>
       {/* <Text style={styles.secretWordStyle}>{secretWord}</Text> */}
         <FlatList
         data={guessList}
@@ -93,32 +89,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontWeight: "300"
   },
-  pointsCountStyle: {
-    fontSize: 16,
-    marginBottom: 16,
-    fontWeight: "300"
-  },
-  secretWordStyle: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    marginTop: 16,
-    textAlign: 'center'
-  },
-  secretWordPOSStyle: {
-    fontSize: 12,
-    marginBottom: 5,
-    marginTop: 5,
-    textAlign: 'center'
-  },
   inputStyle: {
     height: "10%",
     borderColor: '#ccc',
     borderWidth: 1,
     paddingHorizontal: 8
-  },
-  response: {
-    fontSize: 16,
-    color: '#333'
   },
   guessItemStyle: {
     padding: 20,

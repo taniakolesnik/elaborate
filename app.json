@@ -21,10 +21,23 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.tania_kolesnik.elaborate"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1af4c568-8a50-4760-a94e-97e985a43311"
+      }
+    },
+    "owner": "tania_kolesnik",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/1af4c568-8a50-4760-a94e-97e985a43311"
     }
   }
 }
