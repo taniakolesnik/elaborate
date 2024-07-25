@@ -11,6 +11,7 @@ const Game = () => {
   const [points, setPoints] = useState(0);
   const [guessList, setGuessList] = useState([]);
   const [inputGuess, setInputGuess] = useState('');
+  const [isDisabledSendButton, setIsDisabledSendButton] = useState(true);
   const [secretWord, setSecretWord] = useState('');
 
   useEffect(() => {
@@ -31,23 +32,22 @@ const Game = () => {
     }
   };
 
-  const checkGuessInput = async () => {
-    try {
-      const response = await getCommon(inputGuess, secretWord);
-      if (response == secretWord) {
-        setPoints(10);
-        alert(`Game over. You won. Points:10`);
-      } else {
-        setGuessList(guessList.concat(inputGuess + " : " + response))
-        if (attempts + 1 > maxAttempts){
-          alert("Game over. You lost");
-        } else {
-          setAttempts(attempts+1)
-        }
-      }
+  const validateInput = async (input) => {
+    setInputGuess(input)
+    if (input.length == 5){
+      setIsDisabledSendButton(false)
+    } else {
+      setIsDisabledSendButton(true)
+    }
+  };
 
-    } catch (error) {
-      console.error('Error in sendRequest:', error);
+  const checkGuessInput = async () => {
+    if (secretWord == inputGuess){
+      alert(`You won! Secret word is ${secretWord}`);
+    } else {
+      const response = await getCommon(inputGuess, secretWord);
+      setGuessList(guessList.concat(inputGuess + " : " + response))
+      setAttempts(attempts+1)
     }
   };
 
@@ -62,9 +62,7 @@ const Game = () => {
     <View style={styles.container}>
       <Text style={styles.attemptsCountStyle}>Attempts: {attempts}/{maxAttempts}</Text>
       <Text style={styles.pointsCountStyle}>Points: {points}</Text>
-      <Text style={styles.secretWordStyle}
-        adjustsFontSizeToFit={true}
-        numberOfLines={1}>{secretWord}</Text>
+      {/* <Text style={styles.secretWordStyle}>{secretWord}</Text> */}
         <FlatList
         data={guessList}
         renderItem={renderItem}
@@ -75,9 +73,9 @@ const Game = () => {
         placeholder="Type your message here"
         value={inputGuess}
         autoCapitalize="none"
-        onChangeText={setInputGuess}
+        onChangeText={validateInput}
       />
-      <Button title="Send" onPress={checkGuessInput} />
+      <Button disabled={isDisabledSendButton} title="Send" onPress={checkGuessInput} />
 
     </View>
   );
