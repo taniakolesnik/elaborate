@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { fetchAPIKey } from "./getAPIKey.js";
+import { fetchAPIKey } from "../getAPIKey.js";
 
 const ChatGPTAPIClient = async (inputMessage, secretWord) => {
   const apiURL = 'https://api.openai.com/v1/chat/completions';
-  const userContent = "does '" + inputMessage + "' mean '" + secretWord + "' ? if yes, just reply 'yes' and stop. if not exactly, what is common between '" + secretWord + "' and '" + inputMessage + "'? in a few words"; 
+  const userContent = "does '" + inputMessage + "' mean '" + secretWord + "' ? if yes, just reply 'yes' and stop. if not exactly, what is common between '" + secretWord + "' and '" + inputMessage + "'? just ONE WORD reply only."; 
 
   console.log(userContent)
 

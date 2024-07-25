@@ -3,7 +3,8 @@ import { FlatList, StyleSheet, TextInput, Text, View, Button, ScrollView } from 
 import getRandomWord from './getRandomWord'
 // import getCommon from './getCommon';
 // import getSynonyms from './getSynonyms';
-import ChatGPTAPIClient from './ChatGPTAPIClient';
+// import ChatGPTAPIClient from './ChatGPTAPIClient';
+import APIClient from './APIClient';
 
 const Game = () => {
 
@@ -35,8 +36,8 @@ const Game = () => {
 
   const checkGuessInput = async () => {
     try {
-      const response = await ChatGPTAPIClient(inputGuess, secretWord);
-      if (response == "Yes") {
+      const response = await APIClient(inputGuess, secretWord);
+      if (response == secretWord) {
         setPoints(10);
         alert(`Game over. You won. Points:10`);
       } else {

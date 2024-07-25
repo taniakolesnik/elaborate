@@ -1,7 +1,7 @@
 import { StyleSheet, TextInput, Text, View, TouchableOpacity} from 'react-native';
 import OpenAI from 'openai';
 import { useState } from "react";
-import { openAiClient } from "./openAiClient.js";
+import { openAiClient } from "./old/openAiClient.js";
 import { useEffect } from "react";
 
 const Main = () => {

@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { getAPIKey } from "./getAPIKey.js";
+import { getAPIKey } from "../getAPIKey.js";
 import { useState, useEffect, Configuration } from "react";
 
 export const openAiClient = () => {

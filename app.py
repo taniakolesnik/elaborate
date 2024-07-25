@@ -1,20 +1,18 @@
-# Load the text8 model
-from flask import Flask, request, jsonify
-
 import numpy as np
 from nltk.stem import PorterStemmer
+from nltk.stem import LancasterStemmer
+
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+import json
 
 import nltk
-nltk.download('punkt')
 nltk.download('stopwords')
+from nltk.corpus import stopwords
 
-app = Flask(__name__)
-app.config['DEBUG'] = True  # Enable debug mode
+import random
 
 # Load the GloVe model
-# https://stackoverflow.com/questions/37793118/load-pretrained-glove-vectors-in-python
 def load_glove_model(file_path):
     glove_model = {}
     with open(file_path, 'r', encoding='utf8') as f:
@@ -25,61 +23,78 @@ def load_glove_model(file_path):
             glove_model[word] = embedding
     return glove_model
 
-# Adjust the path as per your environment
-model = load_glove_model("/home/taniakolesnik/elaborate/glove.6B.50d.txt")
+def find_common_word(word1, word2):
+    # Initialize the stemmer
+    
 
-@app.route('/')
-def hello_world():
-    return 'Hello from Flask!'
+    # Check if both words are in the model
+    if word1 not in model or word2 not in model:
+        return "One or both words not in vocabulary"
 
-@app.route('/common_word', methods=['GET'])
-def get_common_word():
-    try:
-        # Initialize the stemmer
-        stemmer = PorterStemmer()
+    # Stem the words
+    word1_stem = stemmer.stem(word1)
+    word2_stem = stemmer.stem(word2)
 
-        # Load GloVe model
-        model = load_glove_model("/home/taniakolesnik/elaborate/glove.6B.50d.txt")
+    # Calculate the mean vector
+    mean_vector = (model[word1] + model[word2]) / 2
 
-        # Get words from query parameters
-        word1 = request.args.get('word1')
-        word2 = request.args.get('word2')
+    # Find the most similar words to this mean vector
+    similarity = {}
+    for word, vector in model.items():
+        if word != word1 and word != word2:
+            # Avoid words with similar stems
+            if stemmer.stem(word) != word1_stem and stemmer.stem(word) != word2_stem:
+                similarity[word] = np.dot(mean_vector, vector) / (np.linalg.norm(mean_vector) * np.linalg.norm(vector))
 
-        # Check if both words are provided
-        if not word1 or not word2:
-            return jsonify({'error': 'Both word1 and word2 parameters are required'}), 400
+    # Find the most similar word
+    if similarity:
+        most_similar = max(similarity, key=similarity.get)
+        return most_similar
+    else:
+        return "No suitable word found"
 
-        # Check if both words are in the model
-        if word1 not in model or word2 not in model:
-            return jsonify({'error': 'One or both words not in vocabulary'}), 400
+def load_random():
+	random_word = random.choice(words)
+	return random_word
 
-        # Stem the words
-        word1_stem = stemmer.stem(word1)
-        word2_stem = stemmer.stem(word2)
+def generate_common_list(secret_word):
+	common_list = {}
+	for word in words:
+		if (word != secret_word):
+			print("looking common for " + word)
+			common = find_common_word(secret_word, word)
+			common_list[word] = common
 
-        mean_vector = (model[word1] + model[word2]) / 2
-
-        # Find the most similar words to this mean vector
-        similarity = {}
-        for word, vector in model.items():
-            if word != word1 and word != word2:
-                # Avoid words with similar stems
-                if stemmer.stem(word) != word1_stem and stemmer.stem(word) != word2_stem:
-                    similarity[word] = np.dot(mean_vector, vector) / (np.linalg.norm(mean_vector) * np.linalg.norm(vector))
-
-        # Find the most similar word
-        if similarity:
-            most_similar = max(similarity, key=similarity.get)
-            # similarity_to_word1 = float(np.dot(model[most_similar], model[word1]) / (np.linalg.norm(model[most_similar]) * np.linalg.norm(model[word1])))
-
-            # return jsonify({'common_word': most_similar, 'similarity_to_word1': similarity_to_word1})
-            return jsonify({'common_word': most_similar})
-        else:
-            return jsonify({'error': 'No similar words found'}), 404
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+	with open('/Users/tetianakolesnik/Documents/MD/elaborate/common_list.json', 'w') as common_list_file:
+		json.dump(common_list, common_list_file, indent=4)
 
 
-if __name__ == '__main__':
-    app.run()
+model = load_glove_model("/Users/tetianakolesnik/Downloads/glove.6B/glove.6B.100d.txt")
+words = list(model.keys())
+stemmer = LancasterStemmer()
+
+# Convert stopwords list to set for faster checking
+# https://stackoverflow.com/questions/62293141/clean-list-from-stopwords
+# https://stackoverflow.com/questions/8109687/how-to-remove-plurals-in-a-list-of-nouns
+stopwords_set = set(stopwords.words('english'))
+# Use stemmer.stem(w) instead of stemmer(w)
+words_fintered = [w for w in words if w.lower() not in stopwords_set and len(w) > 7  and '-' not in w and ' ' not in w]
+
+words = words_fintered
+# print(len(words))
+# print(len(words_fintered))
+# print(words_fintered[10:20])
+
+# Test the function
+# word1 = 'house'
+# word2 = 'tree'
+# common_word, similarity_to_word1 = find_common_word(word1, word2)
+# print(f'The common word between "{word1}" and "{word2}" is: {common_word}')
+# print(f'Similarity of "{common_word}" to "{word1}" is: {similarity_to_word1}')
+random_word = load_random()
+print(f'random word is "{random_word}"')
+generate_common_list(random_word)
+
+
+
+

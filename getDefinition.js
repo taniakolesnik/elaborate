@@ -1,9 +1,8 @@
 import axios from 'axios';
 // import { getAPIKey } from "./getAPIKey.js";
 import { fetchAPIKey } from "./getAPIKey.js";
-import BigHugeLabsAPIDataParser from "./BigHugeLabsAPIDataParser"
 
-const BigHugeLabsAPIClient = async (word) => {
+const getDefinition = async (word) => {
   
  let apiKey = null;
 
@@ -15,7 +14,6 @@ const BigHugeLabsAPIClient = async (word) => {
   };
   
   apiKey = await getAPIKey("bighugelabsapi");
-  // console.log("BigHugeLabs:" + apiKey)
 
   const getList = async (word) => {
     apiURL = `https://words.bighugelabs.com/api/2/${apiKey}/${word}`
@@ -35,4 +33,4 @@ const BigHugeLabsAPIClient = async (word) => {
 
 };
 
-export default BigHugeLabsAPIClient;
+export default getDefinition;

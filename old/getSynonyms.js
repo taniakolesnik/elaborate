@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { fetchAPIKey } from "./getAPIKey.js";
+import { fetchAPIKey } from "../getAPIKey.js";
 import parseSynonyms from './parseSynonyms.js';
 
 const getSynonyms = async (word) => {
