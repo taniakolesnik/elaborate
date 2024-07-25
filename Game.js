@@ -36,6 +36,7 @@ const Game = () => {
     } else {
       setIsDisabledSendButton(true)
     }
+
   };
 
   const checkGuessInput = async () => {
@@ -45,6 +46,7 @@ const Game = () => {
       const response = await getCommon(inputGuess, secretWord);
       setGuessList(guessList.concat(inputGuess + " : " + response))
       setAttempts(attempts+1)
+      setInputGuess("");
     }
   };
 
