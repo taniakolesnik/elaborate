@@ -3,7 +3,7 @@ const getCommon = async (inputMessage, secretWord) => {
   console.log(apiURL)
   try {
     const response = await axios.get(apiURL);
-    return response.data.top_3_words; 
+    return response.data.common; 
 
   } catch (error) {
     console.error('Error calling APIClient API:', error);
@@ -16,3 +16,4 @@ export default getCommon;
  
 
 
+fv

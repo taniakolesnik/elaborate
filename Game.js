@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, TextInput, Text, View, Button, ScrollView } from 'react-native';
 import getRandomWord from './getRandomWord'
-// import getCommon from './getCommon';
-// import getSynonyms from './getSynonyms';
-// import ChatGPTAPIClient from './ChatGPTAPIClient';
-import APIClient from './APIClient';
+import getCommon from './getCommon';
 
 const Game = () => {
 
@@ -36,7 +33,7 @@ const Game = () => {
 
   const checkGuessInput = async () => {
     try {
-      const response = await APIClient(inputGuess, secretWord);
+      const response = await getCommon(inputGuess, secretWord);
       if (response == secretWord) {
         setPoints(10);
         alert(`Game over. You won. Points:10`);
