@@ -5,7 +5,7 @@ import {
     MenuTrigger,
   } from 'react-native-popup-menu';
   import { View } from 'react-native';
-  
+
   export const MenuScreen = ({onNewGameClick}) => (
     <View>
       <Menu>

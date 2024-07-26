@@ -3,14 +3,26 @@ import Game from './Game';
 import React, { useState } from 'react';
 import { MenuScreen } from './MenuScreen';
 import { MenuProvider } from 'react-native-popup-menu';
+import { getData } from './asyncStorage';
 
 const App = () => {
 
   const [gameKey, setGameKey] = useState(0);
 
-  const refreshGame = () => {
-    alert("New game will start now!")
+  const newGame = async (message) => {
+    const secretWord = await getData("secretWord")
+    alert(`${message} Secret word was "${secretWord}". New game starts!`)
     setGameKey(prevKey => prevKey + 1);
+  }
+
+  const giveUp = () => {
+    const message = "You lost!"
+    newGame(message)
+  };
+
+  const gameWin = () => {
+    const message = "You won!"
+    newGame(message)
   };
 
   return (
@@ -19,9 +31,9 @@ const App = () => {
       <View style={styles.container}>
         <View style={styles.topView}> 
           <Text style={styles.appTitle}>Elaborate</Text>
-          <MenuScreen onNewGameClick={refreshGame}/>
+          <MenuScreen onNewGameClick={giveUp}/>
         </View>
-        <Game key={gameKey}/>
+        <Game newGameStart={gameWin} key={gameKey}/>
       </View>
     </MenuProvider>
   );

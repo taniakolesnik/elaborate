@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { FlatList, ActivityIndicator, StyleSheet, TextInput, Text, View, Button } from 'react-native';
 import getRandomWord from './getRandomWord'
 import getCommon from './getCommon';
+import { getData, setData } from './asyncStorage';
 
-const Game = () => {
+const Game = ({newGameStart}) => {
 
   const [attempts, setAttempts] = useState(0);
   const [guessList, setGuessList] = useState([]);
@@ -23,6 +24,7 @@ const Game = () => {
         alert(`no random word catches`);
       } else {
         setSecretWord(response)
+        await setData("secretWord", response)
       }
 
     } catch (error) {
@@ -44,7 +46,7 @@ const Game = () => {
     setIsEnabledActivityIndicator(true);
     setIsDisabledSendButton(true)
     if (secretWord == inputGuess){
-      alert(`You won! Secret word is ${secretWord}`);
+      newGameStart();
       setIsEnabledActivityIndicator(false)
     } else {
       const response = await getCommon(inputGuess, secretWord);
@@ -66,7 +68,11 @@ const Game = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.attemptsCountStyle}>Attempts: {attempts}</Text>
-      {/* <Text style={styles.secretWordStyle}>{secretWord}</Text> */}
+
+      <View style={styles.secretWordViewStyle}>
+         <Text style={styles.secretTextStyle}>XXXXX</Text>
+      </View>
+
       <View style={styles.activityIndicatorStyle}>
         <ActivityIndicator animating={isEnabledActivityIndicator} size="large" />
       </View>
@@ -121,6 +127,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     padding: 10,
   },
+  secretWordViewStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    padding: 10,
+  },  
+  secretTextStyle: {
+    fontSize: 50
+  },
+
+  
 });
 
 export default Game;
