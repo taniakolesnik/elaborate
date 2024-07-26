@@ -67,7 +67,11 @@ const Game = ({newGameStart}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.attemptsCountStyle}>Attempts: {attempts}</Text>
+      
+
+      <View style={styles.attemptsCountStyle}>
+        <Text style={styles.attemptsCountStyle}>Attempts: {attempts}</Text>
+      </View>
 
       <View style={styles.secretWordViewStyle}>
          <Text style={styles.secretTextStyle}>XXXXX</Text>
@@ -104,6 +108,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   attemptsCountStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
     fontSize: 16,
     marginBottom: 16,
     fontWeight: "300"
