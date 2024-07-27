@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Text, View } from 'react-native';
+import { StyleSheet, Alert, Text, View } from 'react-native';
 import Game from './Game';
 import React, { useState } from 'react';
 import { MenuScreen } from './MenuScreen';
@@ -11,9 +11,17 @@ const App = () => {
 
   const newGame = async (message) => {
     const secretWord = await getData("secretWord")
-    alert(`${message} Secret word was "${secretWord}". New game starts!`)
-    setGameKey(prevKey => prevKey + 1);
+    newGameAlert(message, secretWord)
   }
+
+  const newGameAlert = (message, secretWord) =>
+    Alert.alert(message, `Secret word was "${secretWord}". New game starts!`, [
+      {text: 'OK', onPress: () => gameRefresh()},
+    ]);
+
+  const gameRefresh = async () => {
+      setGameKey(prevKey => prevKey + 1);
+    }
 
   const giveUp = () => {
     const message = "You lost!"

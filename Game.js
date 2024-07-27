@@ -42,6 +42,8 @@ const Game = ({newGameStart}) => {
 
   };
 
+
+
   const checkGuessInput = async () => {
     setIsEnabledActivityIndicator(true);
     setIsDisabledSendButton(true)
@@ -71,10 +73,6 @@ const Game = ({newGameStart}) => {
 
       <View style={styles.attemptsCountStyle}>
         <Text style={styles.attemptsCountStyle}>Attempts: {attempts}</Text>
-      </View>
-
-      <View style={styles.secretWordViewStyle}>
-         <Text style={styles.secretTextStyle}>XXXXX</Text>
       </View>
 
       <View style={styles.activityIndicatorStyle}>
