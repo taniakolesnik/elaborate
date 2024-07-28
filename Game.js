@@ -120,10 +120,14 @@ const Game = ({ newGameStart }) => {
   return (
     <View style={styles.container}>
 
+      <View style={styles.activityIndicatorStyle}>
+        <ActivityIndicator animating={isEnabledActivityIndicator} size="small" />
+      </View>
 
       <View style={styles.attemptsCountStyle}>
         <Text style={styles.attemptsCountStyle}>attempts # {attempts}</Text>
       </View>
+
 
       <FlatList
         ref={flatList}
@@ -135,9 +139,6 @@ const Game = ({ newGameStart }) => {
           flatList.current.scrollToEnd();
       }}
       />
-     <View style={styles.activityIndicatorStyle}>
-        <ActivityIndicator animating={isEnabledActivityIndicator} size="large" />
-      </View>
 
       <Animated.View
         style={{opacity: fadeErrorAnimation, alignItems:'left', marginHorizontal: 1}}>
@@ -166,29 +167,27 @@ const Game = ({ newGameStart }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    paddingTop: '5%',
-    paddingBottom: '5%',
+    paddingHorizontal: 8,
+    marginBottom: '5%',
     justifyContent: 'center'
   },
   attemptsCountStyle: {
     alignItems: 'center',
     fontSize: 20,
-    marginBottom: 10
+    marginBottom: 5
   },
   inputStyle: {
     height: "10%",
-    borderColor: '#ccc',
+    borderColor: '#143952',
     borderWidth: 1,
     paddingHorizontal: 10,
-    marginBottom: '5%',
+    marginBottom: '3%',
     borderRadius: 10
   }, 
   guessItemStyle: {
-    padding: 10,
-    marginVertical:3,
+    padding: 8,
+    marginTop: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
     backgroundColor: '#143952',
     borderRadius: 10,
     shadowColor: '#000',
@@ -205,7 +204,6 @@ const styles = StyleSheet.create({
   activityIndicatorStyle: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 10,
   },
   guessInputHelperView: {
     marginVertical: 10,
@@ -217,7 +215,7 @@ const styles = StyleSheet.create({
     fontFamily: 'serif'
   },
   guessInputHelperTextErorr: {
-    fontSize: 14,
+    fontSize: 13,
     color: 'red'
   },
   submitButtonViewStyle: {
