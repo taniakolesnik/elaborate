@@ -30,7 +30,7 @@ const App = () => {
 
   const showEndGameMessageWithSecretWord = (message, secretWord) =>{
     setGameEndTitle(message)
-    setGameEndMessage("Secret word was '" + secretWord + "'.\n New game starts!")
+    setGameEndMessage("Secret word was '" + secretWord + "'.\n New game starts now")
     setnewGameWinwowVisible(true)
   }
   
@@ -98,7 +98,7 @@ const App = () => {
             <Text style={styles.modalTextHeaders}>{gameEndTitle} </Text>
             <Text style={styles.modalText}>{gameEndMessage}</Text>
             <Pressable
-              style={[styles.button, styles.buttonClose]}
+              style={styles.button}
               onPress={() => closeGameEndWindow()}>
               <Text style={styles.textStyle}>Close</Text>
             </Pressable>
@@ -127,9 +127,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   appTitle: {
-    fontSize: 12,
-    marginBottom: 16,
-    fontWeight: "200"
+    fontSize: 16,
+    marginTop: 10,
+    marginLeft: 15,
+    fontWeight: "300"
   },
   topView: {
     flexDirection: 'row',
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
   modalView: {
     marginVertical:'50%',
     marginHorizontal:'10%',
-    backgroundColor: 'white',
+    backgroundColor: '#0c2231',
     borderRadius: 20,
     padding: 20,
     alignItems: 'center',
@@ -156,25 +157,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#FEFEFE'
   },
   textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: '#0c2231',
     textAlign: 'center',
+    fontSize: 14
   },
   modalText: {
     marginBottom: 15,
+    color: '#FEFEFE',
   },
   modalTextHeaders: {
     marginBottom: 15,
     textAlign: 'left',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: '#FEFEFE'
   },
 });
 

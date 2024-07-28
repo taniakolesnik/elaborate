@@ -117,7 +117,7 @@ const Game = ({ newGameStart }) => {
 
 
       <View style={styles.attemptsCountStyle}>
-        <Text style={styles.attemptsCountStyle}>Attempts: {attempts}</Text>
+        <Text style={styles.attemptsCountStyle}>attempts #: {attempts}</Text>
       </View>
 
       <FlatList
@@ -150,7 +150,7 @@ const Game = ({ newGameStart }) => {
         autoCapitalize="none"
         onChangeText={handleInputChange}
       />
-      <Button disabled={isDisabledSendButton} title="Submit" onPress={checkGuessInput} />
+      <Button color="#0c2231" disabled={isDisabledSendButton} title="Submit" onPress={checkGuessInput} />
 
     </View>
   );
@@ -162,23 +162,22 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: '5%',
     paddingBottom: '10%',
+    marginBottom: '10%',
     backgroundColor: '#fff',
     justifyContent: 'center'
   },
   attemptsCountStyle: {
-    justifyContent: 'center',
     alignItems: 'center',
-    alignContent: 'center',
     fontSize: 20,
-    marginBottom: 5,
-    fontWeight: "300"
+    marginBottom: 10
   },
   inputStyle: {
     height: "10%",
     borderColor: '#ccc',
     borderWidth: 1,
-    paddingHorizontal: 10
-  },
+    paddingHorizontal: 10,
+    marginBottom: '10%'
+  }, 
   guessItemStyle: {
     padding: 10,
     borderBottomWidth: 1,
@@ -202,9 +201,7 @@ const styles = StyleSheet.create({
   guessInputHelperTextErorr: {
     fontSize: 16,
     color: 'red'
-  },
-
-
+  }
 });
 
 export default Game;
