@@ -117,7 +117,7 @@ const Game = ({ newGameStart }) => {
 
 
       <View style={styles.attemptsCountStyle}>
-        <Text style={styles.attemptsCountStyle}>attempts #: {attempts}</Text>
+        <Text style={styles.attemptsCountStyle}>attempts # {attempts}</Text>
       </View>
 
       <FlatList

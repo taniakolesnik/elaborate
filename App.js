@@ -16,11 +16,10 @@ const App = () => {
 
   const objective = "Guess the secret English 5-letter word."  
   const rules =  "You must submit a guess that is a 5-letter word also. \n\n" 
-  + "After each guess, you will receive feedback in the form of a list of the most common words that share letters with both your guess and the secret word.\n\n"
+  + "After each guess, you will receive feedback in the form of a list of the most common words between a guess word and a secret one.\n\n"
   + "This feedback helps you narrow down the possible secret word.\n\n"
   + "There is no limit to the number of guesses you can make.\n\n"
-  + "If you wish to give up, you can start a new game.\n\n"
-  + "The secret word of the current game will be revealed to you."
+  + "If you wish to give up, you can start a new game. The secret word of the current game will be revealed to you."
 
 
   const startNewGame = async (message) => {
