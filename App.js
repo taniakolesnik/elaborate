@@ -9,7 +9,10 @@ const App = () => {
 
   const [gameKey, setGameKey] = useState(0);
   // https://reactnative.dev/docs/modal
-  const [modalVisible, setModalVisible] = useState(false);
+  const [rulesWindowVisible, setRulesWindowVisible] = useState(false);
+  const [newGameWinwowVisible, setnewGameWinwowVisible] = useState(false);
+  const [gameEndMessage, setGameEndMessage] = useState("");
+  const [gameEndTitle, setGameEndTitle] = useState("");
 
   const objective = "Guess the secret English 5-letter word."  
   const rules =  "You must submit a guess that is a 5-letter word also. \n\n" 
@@ -19,45 +22,52 @@ const App = () => {
   + "If you wish to give up, you can start a new game.\n\n"
   + "The secret word of the current game will be revealed to you."
 
-  const newGame = async (message) => {
+
+  const startNewGame = async (message) => {
     const secretWord = await getData("secretWord")
-    newGameAlert(message, secretWord)
+    showEndGameMessageWithSecretWord(message, secretWord)
   }
 
-  const newGameAlert = (message, secretWord) =>
-    Alert.alert(message, `Secret word was "${secretWord}". New game starts!`, [
-      {text: 'OK', onPress: () => gameRefresh()},
-    ]);
+  const showEndGameMessageWithSecretWord = (message, secretWord) =>{
+    setGameEndTitle(message)
+    setGameEndMessage("Secret word was '" + secretWord + "'.\n New game starts!")
+    setnewGameWinwowVisible(true)
+  }
+  
+  const closeGameEndWindow = () => {
+    setnewGameWinwowVisible(false)
+    gameRefresh()
+  }
 
   const gameRefresh = async () => {
       setGameKey(prevKey => prevKey + 1);
     }
 
   const giveUp = () => {
-    const message = "You lost!"
-    newGame(message)
+    const message = ""s
+    startNewGame(message)
   };
 
   const gameWin = () => {
     const message = "You won!"
-    newGame(message)
+    startNewGame(message)
   };
 
   const showRules = () => {
-    setModalVisible(true)
+    setRulesWindowVisible(true)
   };
 
   return (
 
     <MenuProvider>
       <View style={styles.container}>
-
+      {/* Rules modal */}
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
-        visible={modalVisible}
+        visible={rulesWindowVisible}
         onRequestClose={() => {
-          setModalVisible(false);
+          setRulesWindowVisible(false);
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -67,12 +77,36 @@ const App = () => {
             <Text style={styles.modalText}>{rules}</Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(false)}>
+              onPress={() => setRulesWindowVisible(false)}>
               <Text style={styles.textStyle}>Close</Text>
             </Pressable>
           </View>
         </View>
       </Modal>
+
+      {/* New game modal */}
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={newGameWinwowVisible}
+        onRequestClose={() => {
+          closeGameEndWindow();
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTextHeaders}>{gameEndTitle} </Text>
+            <Text style={styles.modalText}>{gameEndMessage}</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => closeGameEndWindow()}>
+              <Text style={styles.textStyle}>Close</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
+
 
         <View style={styles.topView}> 
           <Text style={styles.appTitle}>Elaborate</Text>
