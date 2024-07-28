@@ -32,17 +32,19 @@ const Game = ({newGameStart}) => {
     }
   };
 
-  const validateInput = async (input) => {
-    setInputGuess(input)
-    if (input.length == 5){
-      setIsDisabledSendButton(false)
-    } else {
-      setIsDisabledSendButton(true)
-    }
-
+  const validateInput = (input) => {
+    const regex = /^[A-Za-z]+$/;
+    return input.length === 5 && regex.test(input);
   };
 
-
+const handleInputChange = (input) => {
+      setInputGuess(input)
+      if (validateInput(input)) {
+        setIsDisabledSendButton(false);
+      } else {
+        setIsDisabledSendButton(true);
+      }
+  };
 
   const checkGuessInput = async () => {
     setIsEnabledActivityIndicator(true);
@@ -83,14 +85,19 @@ const Game = ({newGameStart}) => {
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
       />
+      <View style={styles.guessInputHelperView}>
+        <Text style={styles.guessInputHelperText}>Submit will be activated when the guess input is 5 characters long. </Text>
+        <Text style={styles.guessInputHelperText}>No spaces or special characters are permitted.</Text>
+
+      </View>
       <TextInput
         style={styles.inputStyle}
-        placeholder="Type your message here"
+        placeholder="Type your guess here"
         value={inputGuess}
         autoCapitalize="none"
-        onChangeText={validateInput}
+        onChangeText={handleInputChange}
       />
-      <Button disabled={isDisabledSendButton} title="Send" onPress={checkGuessInput} />
+      <Button disabled={isDisabledSendButton} title="Submit" onPress={checkGuessInput} />
 
     </View>
   );
@@ -140,6 +147,13 @@ const styles = StyleSheet.create({
   },  
   secretTextStyle: {
     fontSize: 50
+  },
+  guessInputHelperView: {
+    margin:10
+  },
+  guessInputHelperText: {
+    fontSize: 13,
+    color: 'grey'
   },
 
   
