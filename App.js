@@ -108,7 +108,7 @@ const App = () => {
 
 
         <View style={styles.topView}> 
-          <Text style={styles.appTitle}>Elaborate</Text>
+          <Text style={styles.appTitle}>elaborate</Text>
           <MenuScreen onNewGameClick={giveUp} onShowRulesClick={showRules}/>
         </View>
         <Game newGameStart={gameWin} key={gameKey}/>
@@ -144,10 +144,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
-      width: 0,
-      height: 2,
+      width: 5,
+      height: 10,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.4,
     shadowRadius: 4
     ,
     elevation: 5,

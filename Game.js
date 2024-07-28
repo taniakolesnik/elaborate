@@ -12,6 +12,7 @@ const Game = ({ newGameStart }) => {
   const [isDisabledSendButton, setIsDisabledSendButton] = useState(true);
   const [isEnabledActivityIndicator, setIsEnabledActivityIndicator] = useState(false);
   const [secretWord, setSecretWord] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const flatList = React.useRef(null)
   const fadeErrorAnimation = useRef(new Animated.Value(0)).current;
 
@@ -28,7 +29,6 @@ const Game = ({ newGameStart }) => {
         setSecretWord(response)
         await setData("secretWord", response)
       }
-
     } catch (error) {
       console.error('Error in setRandomWord:', error);
     }
@@ -50,28 +50,33 @@ const Game = ({ newGameStart }) => {
     }
   };
 
+  
+
   const checkGuessInput = async () => {
     setIsEnabledActivityIndicator(true);
     setIsDisabledSendButton(true)
     if (secretWord == inputGuess) {
       newGameStart();
-      setIsEnabledActivityIndicator(false)
     } else if (inputGuess in guessList) {
-      console.log("already used")
       setInputGuess("");
-      setIsEnabledActivityIndicator(false);
-      setIsEnabledActivityIndicator(false)
+      setErrorMessage("This guess word was already used")
       fadeIn()
     } else {
       const response = await getCommon(inputGuess, secretWord);
-      gustListUpdated = guessList
-      gustListUpdated[inputGuess] = response
-      setGuessList(gustListUpdated)
-      setAttempts(attempts + 1)
-      setInputGuess("");
-      setIsEnabledActivityIndicator(false);
-      setIsEnabledActivityIndicator(false)
+      if (response == "One or both words not in vocabulary"){
+        setInputGuess("");
+        setErrorMessage("Cannot find this word in my vocabulary. \nPlease check spelling")
+        fadeIn()
+      } else {
+        gustListUpdated = guessList
+        gustListUpdated[inputGuess] = response
+        setGuessList(gustListUpdated)
+        setAttempts(attempts + 1)
+        setInputGuess("");
+      }
     }
+
+    setIsEnabledActivityIndicator(false);
   };
 
   const renderItem = ({ item }) => (
@@ -105,7 +110,7 @@ const Game = ({ newGameStart }) => {
         // Join the array values into a single string separated by commas
         let values = dict[key].join(", ");
         // Construct the string representation and push it into the result array
-        result.push(`${key}: ${values}`);
+        result.push(`${key} > ${values}`);
       }
     }
     return result;
@@ -135,13 +140,12 @@ const Game = ({ newGameStart }) => {
       </View>
 
       <Animated.View
-        style={{opacity: fadeErrorAnimation, alignItems:'center'}}>
-        <Text style={styles.guessInputHelperTextErorr}>Guess already used</Text>
+        style={{opacity: fadeErrorAnimation, alignItems:'left', marginHorizontal: 1}}>
+        <Text style={styles.guessInputHelperTextErorr}>{errorMessage}</Text>
       </Animated.View>
 
       <View style={styles.guessInputHelperView}>
-        <Text style={styles.guessInputHelperText}>Submit will be activated when the guess input is 5 characters long. </Text>
-        <Text style={styles.guessInputHelperText}>No spaces or special characters are permitted.</Text>
+        <Text style={styles.guessInputHelperText}>Submit button is activated when the guess input is 5 exactly characters long. No spaces or special characters are permitted.</Text>
       </View>
       <TextInput
         style={styles.inputStyle}
@@ -150,7 +154,10 @@ const Game = ({ newGameStart }) => {
         autoCapitalize="none"
         onChangeText={handleInputChange}
       />
-      <Button color="#0c2231" disabled={isDisabledSendButton} title="Submit" onPress={checkGuessInput} />
+
+    <View style={styles.submitButtonViewStyle}>
+      <Button elevation="2" color="#0c2231" disabled={isDisabledSendButton} title="Submit" onPress={checkGuessInput} />
+    </View>
 
     </View>
   );
@@ -161,9 +168,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     paddingTop: '5%',
-    paddingBottom: '10%',
-    marginBottom: '10%',
-    backgroundColor: '#fff',
+    paddingBottom: '5%',
     justifyContent: 'center'
   },
   attemptsCountStyle: {
@@ -176,15 +181,26 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     paddingHorizontal: 10,
-    marginBottom: '10%'
+    marginBottom: '5%',
+    borderRadius: 10
   }, 
   guessItemStyle: {
     padding: 10,
+    marginVertical:3,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+    backgroundColor: '#143952',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 5,
+      height: 10,
+    }, 
+    elevation: 2,
   },
   guessTextStyle: {
     fontSize: 14,
+    color:'white'
   },
   activityIndicatorStyle: {
     flexDirection: 'row',
@@ -192,16 +208,23 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   guessInputHelperView: {
-    margin: 10
+    marginVertical: 10,
+    marginHorizontal: 1,
   },
   guessInputHelperText: {
-    fontSize: 13,
-    color: 'grey'
+    fontSize: 11,
+    color: 'grey',
+    fontFamily: 'serif'
   },
   guessInputHelperTextErorr: {
-    fontSize: 16,
+    fontSize: 14,
     color: 'red'
-  }
+  },
+  submitButtonViewStyle: {
+    borderRadius: 10, 
+    overflow: 'hidden'
+  },
+  
 });
 
 export default Game;

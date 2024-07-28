@@ -7,6 +7,7 @@ const getCommon = async (inputMessage, secretWord) => {
   console.log(apiURL)
   try {
     const response = await axios.get(apiURL);
+    console.log(response.data.common)
     return response.data.common; 
 
   } catch (error) {
