@@ -41,8 +41,9 @@ const Game = ({ newGameStart }) => {
 
   const handleInputChange = (input) => {
     fadeOut()
-    setInputGuess(input)
-    if (validateInput(input)) {
+    const inputLowerCase = input.toLowerCase()
+    setInputGuess(inputLowerCase)
+    if (validateInput(inputLowerCase)) {
       setIsDisabledSendButton(false);
     } else {
       setIsDisabledSendButton(true);
@@ -135,7 +136,7 @@ const Game = ({ newGameStart }) => {
 
       <Animated.View
         style={{opacity: fadeErrorAnimation, alignItems:'center'}}>
-        <Text style={styles.guessInputHelperTextErorr}>Guess already used!</Text>
+        <Text style={styles.guessInputHelperTextErorr}>Guess already used</Text>
       </Animated.View>
 
       <View style={styles.guessInputHelperView}>
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
-    fontSize: 16,
+    fontSize: 20,
     marginBottom: 5,
     fontWeight: "300"
   },
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     color: 'grey'
   },
   guessInputHelperTextErorr: {
-    fontSize: 13,
+    fontSize: 16,
     color: 'red'
   },
 
