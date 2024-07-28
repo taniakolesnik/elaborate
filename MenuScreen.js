@@ -2,9 +2,9 @@ import {
     Menu,
     MenuOptions,
     MenuOption,
-    MenuTrigger,
+    MenuTrigger, MenuProvider
   } from 'react-native-popup-menu';
-  import { StyleSheet, View, Alert} from 'react-native';
+  import { StyleSheet, View, Alert, Text} from 'react-native';
 
   const howToPlayAlert = () => {
     Alert.alert("how to play", "secret word is 5 letter word." 
@@ -18,10 +18,13 @@ import {
 
     <View>
       <Menu>
-        <MenuTrigger text={'⋮'} />
+        {/* <MenuTrigger style={{color: 'red'}} text={'⋮'} /> */}
+      <MenuTrigger>
+          <Text style={{fontSize : 30}}>  ⁝  </Text>
+      </MenuTrigger>
         <MenuOptions>
-          <MenuOption style={styles.menuItemStyle} onSelect={() => onNewGameClick()} text='New game' />
-          <MenuOption style={styles.menuItemStyle} onSelect={() => howToPlayAlert()} text='How to play' />
+          <MenuOption style={styles.menuItemStyle} onSelect={() => onNewGameClick()} text='Give up' />
+          <MenuOption style={styles.menuItemStyle} onSelect={() => howToPlayAlert()} text='Rules' />
         </MenuOptions>
       </Menu>
     </View>
