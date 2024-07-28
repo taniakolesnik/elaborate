@@ -44,7 +44,7 @@ const App = () => {
     }
 
   const giveUp = () => {
-    const message = ""s
+    const message = ""
     startNewGame(message)
   };
 
