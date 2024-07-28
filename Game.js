@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, ActivityIndicator, StyleSheet, TextInput, Text, View, Button } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Animated, FlatList, ActivityIndicator, StyleSheet, TextInput, Text, View, Button } from 'react-native';
 import getRandomWord from './getRandomWord'
 import getCommon from './getCommon';
 import { getData, setData } from './asyncStorage';
@@ -7,12 +7,13 @@ import { getData, setData } from './asyncStorage';
 const Game = ({ newGameStart }) => {
 
   const [attempts, setAttempts] = useState(0);
-  const [guessList, setGuessList] = useState([]);
+  const [guessList, setGuessList] = useState({});
   const [inputGuess, setInputGuess] = useState('');
   const [isDisabledSendButton, setIsDisabledSendButton] = useState(true);
   const [isEnabledActivityIndicator, setIsEnabledActivityIndicator] = useState(false);
   const [secretWord, setSecretWord] = useState('');
   const flatList = React.useRef(null)
+  const fadeErrorAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     getSecretWord();
@@ -39,6 +40,7 @@ const Game = ({ newGameStart }) => {
   };
 
   const handleInputChange = (input) => {
+    fadeOut()
     setInputGuess(input)
     if (validateInput(input)) {
       setIsDisabledSendButton(false);
@@ -53,9 +55,17 @@ const Game = ({ newGameStart }) => {
     if (secretWord == inputGuess) {
       newGameStart();
       setIsEnabledActivityIndicator(false)
+    } else if (inputGuess in guessList) {
+      console.log("already used")
+      setInputGuess("");
+      setIsEnabledActivityIndicator(false);
+      setIsEnabledActivityIndicator(false)
+      fadeIn()
     } else {
       const response = await getCommon(inputGuess, secretWord);
-      setGuessList(guessList.concat(inputGuess + " : " + response))
+      gustListUpdated = guessList
+      gustListUpdated[inputGuess] = response
+      setGuessList(gustListUpdated)
       setAttempts(attempts + 1)
       setInputGuess("");
       setIsEnabledActivityIndicator(false);
@@ -69,6 +79,37 @@ const Game = ({ newGameStart }) => {
     </View>
   );
 
+  const fadeIn = () => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeErrorAnimation, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const fadeOut = () => {
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeErrorAnimation, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const dictionaryToArray = (dict) => {
+    let result = [];
+    for (let key in dict) {
+      if (dict.hasOwnProperty(key)) {
+        // Join the array values into a single string separated by commas
+        let values = dict[key].join(", ");
+        // Construct the string representation and push it into the result array
+        result.push(`${key}: ${values}`);
+      }
+    }
+    return result;
+  };
+
 
   return (
     <View style={styles.container}>
@@ -80,7 +121,7 @@ const Game = ({ newGameStart }) => {
 
       <FlatList
         ref={flatList}
-        data={guessList}
+        data={dictionaryToArray(guessList)}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         // https://stackoverflow.com/questions/46304677/scrolltoend-after-update-data-for-flatlist
@@ -91,10 +132,15 @@ const Game = ({ newGameStart }) => {
      <View style={styles.activityIndicatorStyle}>
         <ActivityIndicator animating={isEnabledActivityIndicator} size="large" />
       </View>
+
+      <Animated.View
+        style={{opacity: fadeErrorAnimation, alignItems:'center'}}>
+        <Text style={styles.guessInputHelperTextErorr}>Guess already used!</Text>
+      </Animated.View>
+
       <View style={styles.guessInputHelperView}>
         <Text style={styles.guessInputHelperText}>Submit will be activated when the guess input is 5 characters long. </Text>
         <Text style={styles.guessInputHelperText}>No spaces or special characters are permitted.</Text>
-
       </View>
       <TextInput
         style={styles.inputStyle}
@@ -133,7 +179,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   guessItemStyle: {
-    padding: 20,
+    padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
@@ -151,6 +197,10 @@ const styles = StyleSheet.create({
   guessInputHelperText: {
     fontSize: 13,
     color: 'grey'
+  },
+  guessInputHelperTextErorr: {
+    fontSize: 13,
+    color: 'red'
   },
 
 
