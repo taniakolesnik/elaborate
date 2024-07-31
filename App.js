@@ -1,8 +1,6 @@
-import { StyleSheet, Alert, Text, View, Modal, Pressable } from 'react-native';
+import { StyleSheet, Alert, Text, View, Modal, Pressable, SafeAreaView } from 'react-native';
 import Game from './Game';
 import React, { useState } from 'react';
-import { MenuScreen } from './MenuScreen';
-import { MenuProvider } from 'react-native-popup-menu';
 import { getData } from './asyncStorage';
 
 const App = () => {
@@ -58,7 +56,8 @@ const App = () => {
 
   return (
 
-    <MenuProvider>
+
+    <SafeAreaView style={styles.container}>
       <View style={styles.container}>
       {/* Rules modal */}
       <Modal
@@ -109,20 +108,17 @@ const App = () => {
 
         <View style={styles.topView}> 
           <Text style={styles.appTitle}>elaborate</Text>
-          <MenuScreen onNewGameClick={giveUp} onShowRulesClick={showRules}/>
         </View>
-        <Game newGameStart={gameWin} key={gameKey}/>
-        
+        <Game newGameStart={gameWin} onNewGameClick={giveUp} onShowRulesClick={showRules} key={gameKey}/>
       </View>
-    </MenuProvider>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: '20%',
+    paddingHorizontal: 10,
     backgroundColor: '#fff'
   },
   appTitle: {

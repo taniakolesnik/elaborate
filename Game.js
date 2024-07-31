@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Animated, FlatList, ActivityIndicator, StyleSheet, TextInput, Text, View, Button } from 'react-native';
+import { Animated, FlatList, ActivityIndicator, StyleSheet, TextInput, Text, View, Button, Pressable } from 'react-native';
 import getRandomWord from './getRandomWord'
 import getCommon from './getCommon';
 import { getData, setData } from './asyncStorage';
 
-const Game = ({ newGameStart }) => {
+const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
 
   const [attempts, setAttempts] = useState(0);
   const [guessList, setGuessList] = useState({});
@@ -50,7 +50,7 @@ const Game = ({ newGameStart }) => {
     }
   };
 
-  
+
 
   const checkGuessInput = async () => {
     setIsEnabledActivityIndicator(true);
@@ -63,7 +63,7 @@ const Game = ({ newGameStart }) => {
       fadeIn()
     } else {
       const response = await getCommon(inputGuess, secretWord);
-      if (response == "One or both words not in vocabulary"){
+      if (response == "One or both words not in vocabulary") {
         setInputGuess("");
         setErrorMessage("Cannot find this word in my vocabulary. \nPlease check spelling")
         fadeIn()
@@ -124,8 +124,16 @@ const Game = ({ newGameStart }) => {
         <ActivityIndicator animating={isEnabledActivityIndicator} size="small" />
       </View>
 
-      <View style={styles.attemptsCountStyle}>
-        <Text style={styles.attemptsCountStyle}>attempts # {attempts}</Text>
+
+
+      <View style={styles.topView}>
+        <Pressable onPress={onShowRulesClick}>
+          <Text style={styles.topViewSmall}>Rules</Text>
+        </Pressable>
+        <Text style={styles.topViewLarge}>attempts # {attempts}</Text>
+        <Pressable onPress={onNewGameClick}>
+          <Text style={styles.topViewSmall}>Give Up</Text>
+        </Pressable>
       </View>
 
 
@@ -137,11 +145,11 @@ const Game = ({ newGameStart }) => {
         // https://stackoverflow.com/questions/46304677/scrolltoend-after-update-data-for-flatlist
         onContentSizeChange={() => {
           flatList.current.scrollToEnd();
-      }}
+        }}
       />
 
       <Animated.View
-        style={{opacity: fadeErrorAnimation, alignItems:'left', marginHorizontal: 1}}>
+        style={{ opacity: fadeErrorAnimation, alignItems: 'left', marginHorizontal: 1 }}>
         <Text style={styles.guessInputHelperTextErorr}>{errorMessage}</Text>
       </Animated.View>
 
@@ -156,9 +164,9 @@ const Game = ({ newGameStart }) => {
         onChangeText={handleInputChange}
       />
 
-    <View style={styles.submitButtonViewStyle}>
-      <Button elevation="2" color="#0c2231" disabled={isDisabledSendButton} title="Submit" onPress={checkGuessInput} />
-    </View>
+      <View style={styles.submitButtonViewStyle}>
+        <Button elevation="2" color="#0c2231" disabled={isDisabledSendButton} title="Submit" onPress={checkGuessInput} />
+      </View>
 
     </View>
   );
@@ -167,23 +175,29 @@ const Game = ({ newGameStart }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 8,
+    paddingHorizontal: 10,
     marginBottom: '5%',
     justifyContent: 'center'
   },
-  attemptsCountStyle: {
-    alignItems: 'center',
-    fontSize: 20,
-    marginBottom: 5
+  topView: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center'
+  },
+  topViewLarge: {
+    fontSize: 24,
+  },
+  topViewSmall: {
+    fontSize: 14
   },
   inputStyle: {
-    height: "10%",
+    height: "5%",
     borderColor: '#143952',
     borderWidth: 1,
     paddingHorizontal: 10,
     marginBottom: '3%',
     borderRadius: 10
-  }, 
+  },
   guessItemStyle: {
     padding: 8,
     marginTop: 10,
@@ -194,12 +208,12 @@ const styles = StyleSheet.create({
     shadowOffset: {
       width: 5,
       height: 10,
-    }, 
+    },
     elevation: 2,
   },
   guessTextStyle: {
     fontSize: 14,
-    color:'white'
+    color: 'white'
   },
   activityIndicatorStyle: {
     flexDirection: 'row',
@@ -219,10 +233,10 @@ const styles = StyleSheet.create({
     color: 'red'
   },
   submitButtonViewStyle: {
-    borderRadius: 10, 
+    borderRadius: 10,
     overflow: 'hidden'
   },
-  
+
 });
 
 export default Game;
