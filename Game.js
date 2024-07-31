@@ -23,8 +23,10 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
   const getSecretWord = async () => {
     try {
       const response = await getRandomWord();
-      if (response[0].length == 0) {
-        alert(`no random word catches`);
+      if (response == "error") {
+        setErrorMessage("No connection to the server. Please try later.");
+        fadeIn()
+        setSecretWord("NO_CONNECTION")
       } else {
         setSecretWord(response)
         await setData("secretWord", response)
@@ -40,10 +42,14 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
   };
 
   const handleInputChange = (input) => {
-    fadeOut()
+    if (secretWord != "NO_CONNECTION"){
+      fadeOut();
+      setIsDisabledSendButton(true);
+    } 
+
     const inputLowerCase = input.toLowerCase()
     setInputGuess(inputLowerCase)
-    if (validateInput(inputLowerCase)) {
+    if (validateInput(inputLowerCase) && secretWord != "NO_CONNECTION") {
       setIsDisabledSendButton(false);
     } else {
       setIsDisabledSendButton(true);
@@ -65,8 +71,12 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
       const response = await getCommon(inputGuess, secretWord);
       if (response == "One or both words not in vocabulary") {
         setInputGuess("");
-        setErrorMessage("Cannot find this word in my vocabulary. \nPlease check spelling")
+        setErrorMessage("Cannot find this word in my vocabulary\nPlease check spelling")
         fadeIn()
+      } else if (response == "error") {
+          setInputGuess("");
+          setErrorMessage("No connection to the server\nPlease try later")
+          fadeIn()
       } else {
         gustListUpdated = guessList
         gustListUpdated[inputGuess] = response
@@ -75,7 +85,6 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
         setInputGuess("");
       }
     }
-
     setIsEnabledActivityIndicator(false);
   };
 
@@ -130,7 +139,7 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
         <Pressable onPress={onShowRulesClick}>
           <Text style={styles.topViewSmall}>Rules</Text>
         </Pressable>
-        <Text style={styles.topViewLarge}>attempts # {attempts}</Text>
+        <Text style={styles.topViewLarge}>Attemts# {attempts}</Text>
         <Pressable onPress={onNewGameClick}>
           <Text style={styles.topViewSmall}>Give Up</Text>
         </Pressable>
@@ -176,22 +185,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
-    marginBottom: '5%',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   topView: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 20
   },
   topViewLarge: {
-    fontSize: 24,
+    fontSize: 18,
   },
   topViewSmall: {
     fontSize: 14
   },
   inputStyle: {
-    height: "5%",
+    height: 40,
     borderColor: '#143952',
     borderWidth: 1,
     paddingHorizontal: 10,

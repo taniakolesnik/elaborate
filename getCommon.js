@@ -11,8 +11,7 @@ const getCommon = async (inputMessage, secretWord) => {
     return response.data.common; 
 
   } catch (error) {
-    console.error('Error calling APIClient API:', error);
-    return 'Error: Unable to fetch response';
+    return "error";
   }
 };
 

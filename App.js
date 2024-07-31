@@ -1,4 +1,4 @@
-import { StyleSheet, Alert, Text, View, Modal, Pressable, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Modal, Pressable, SafeAreaView } from 'react-native';
 import Game from './Game';
 import React, { useState } from 'react';
 import { getData } from './asyncStorage';
@@ -27,7 +27,7 @@ const App = () => {
 
   const showEndGameMessageWithSecretWord = (message, secretWord) =>{
     setGameEndTitle(message)
-    setGameEndMessage("Secret word was '" + secretWord + "'.\n New game starts now")
+    setGameEndMessage("Secret word is '" + secretWord + "'\n New game starts now")
     setnewGameWinwowVisible(true)
   }
   
@@ -94,7 +94,7 @@ const App = () => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalTextHeaders}>{gameEndTitle} </Text>
-            <Text style={styles.modalText}>{gameEndMessage}</Text>
+            <Text style={styles.modalTextLarge}>{gameEndMessage}</Text>
             <Pressable
               style={styles.button}
               onPress={() => closeGameEndWindow()}>
@@ -104,11 +104,10 @@ const App = () => {
         </View>
       </Modal>
 
-
-
+{/* 
         <View style={styles.topView}> 
-          <Text style={styles.appTitle}>elaborate</Text>
-        </View>
+          <Text style={styles.appTitle}>Elaborate</Text>
+        </View> */}
         <Game newGameStart={gameWin} onNewGameClick={giveUp} onShowRulesClick={showRules} key={gameKey}/>
       </View>
     </SafeAreaView>
@@ -118,21 +117,23 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 20,
     paddingHorizontal: 10,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    marginBottom: 15
   },
   appTitle: {
-    fontSize: 16,
-    marginTop: 10,
-    marginLeft: 15,
-    fontWeight: "300"
+    fontSize: 24,
+
   },
   topView: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'center',
+    alignItems: 'baseline',
+    marginTop: 15,
   },  
   modalView: {
-    marginVertical:'50%',
+    marginVertical:'35%',
     marginHorizontal:'10%',
     backgroundColor: '#0c2231',
     borderRadius: 20,
@@ -161,13 +162,20 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
+    fontSize: 14,
+    color: '#FEFEFE',
+  },
+  modalTextLarge: {
+    marginBottom: 15,
+    fontSize: 18,
     color: '#FEFEFE',
   },
   modalTextHeaders: {
     marginBottom: 15,
     textAlign: 'left',
     fontWeight: 'bold',
-    color: '#FEFEFE'
+    color: '#FEFEFE',
+    fontSize: 20
   },
 });
 
