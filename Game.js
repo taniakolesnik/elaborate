@@ -79,7 +79,6 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
           setErrorMessage("No connection to the server\nPlease try later")
           fadeIn()
       } else {
-        const position = getPosition(response)
         gustListUpdated = guessList
         gustListUpdated[inputGuess] = response
         setGuessList(gustListUpdated)
@@ -114,19 +113,39 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
     }).start();
   };
 
-  const dictionaryToArray = (dict) => {
-    let result = [];
-    for (let key in dict) {
-      if (dict.hasOwnProperty(key)) {
-        // Join the array values into a single string separated by commas
-        let values = dict[key].join(", ");
-        // Construct the string representation and push it into the result array
-        result.push(`${key} > ${values}`);
-      }
-    }
-    return result;
-  };
+  // const dictionaryToArray = (dict) => {
+  //   console.log(dict)
+  //   let result = [];
+  //   for (let key in dict) {
+  //     if (dict.hasOwnProperty(key)) {
+  //       // Join the array values into a single string separated by commas
+  //       let values = dict[key].join(", ");
+  //       // Construct the string representation and push it into the result array
+  //       result.push(`${key} > ${values}`);
+  //     }
+  //   }
+  //   return result;
+  // };
 
+
+  const formatDictionary = (dict) => {
+    // Initialize an empty array to hold formatted strings
+    const result = [];
+  
+    // Iterate over each key-value pair in the dictionary
+    for (const [key, entries] of Object.entries(dict)) {
+      // Map the entries to the desired format and join them with a comma
+      const formattedEntries = entries
+        .map(([word, value]) => `${word} (${value})`)
+        .join(', ');
+  
+      // Create the formatted string for the current key
+      result.push(`${key}: ${formattedEntries}`);
+    }
+  
+    // Join all formatted strings with a newline
+    return result
+  };
 
   return (
     <View style={styles.container}>
@@ -150,7 +169,7 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
 
       <FlatList
         ref={flatList}
-        data={dictionaryToArray(guessList)}
+        data={formatDictionary(guessList)}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         // https://stackoverflow.com/questions/46304677/scrolltoend-after-update-data-for-flatlist
