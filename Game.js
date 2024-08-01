@@ -3,6 +3,7 @@ import { Animated, FlatList, ActivityIndicator, StyleSheet, TextInput, Text, Vie
 import getRandomWord from './getRandomWord'
 import getCommon from './getCommon';
 import { getData, setData } from './asyncStorage';
+import getPosition from './getPosition';
 
 const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
 
@@ -78,6 +79,7 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
           setErrorMessage("No connection to the server\nPlease try later")
           fadeIn()
       } else {
+        const position = getPosition(response)
         gustListUpdated = guessList
         gustListUpdated[inputGuess] = response
         setGuessList(gustListUpdated)
