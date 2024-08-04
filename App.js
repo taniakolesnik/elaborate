@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Modal, Pressable, SafeAreaView } from 'react-native';
+import { Alert, StyleSheet, Text, View, Modal, Pressable, SafeAreaView } from 'react-native';
 import Game from './Game';
 import React, { useState } from 'react';
 import { getData } from './asyncStorage';
@@ -54,6 +54,15 @@ const App = () => {
     setRulesWindowVisible(true)
   };
 
+  const onGiveUpAlert = () =>
+    Alert.alert('Give up', 'Are you sure you want to give up?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => giveUp()},
+    ]);
+
   return (
 
 
@@ -108,7 +117,7 @@ const App = () => {
         <View style={styles.topView}> 
           <Text style={styles.appTitle}>Elaborate</Text>
         </View> */}
-        <Game newGameStart={gameWin} onNewGameClick={giveUp} onShowRulesClick={showRules} key={gameKey}/>
+        <Game newGameStart={gameWin} onNewGameClick={onGiveUpAlert} onShowRulesClick={showRules} key={gameKey}/>
       </View>
     </SafeAreaView>
   );

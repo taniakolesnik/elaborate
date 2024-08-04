@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Animated, FlatList, ActivityIndicator, StyleSheet, TextInput, Text, View, Button, Pressable } from 'react-native';
+import { Alert, Animated, FlatList, ActivityIndicator, StyleSheet, TextInput, Text, View, Button, Pressable } from 'react-native';
 import getRandomWord from './getRandomWord'
 import getCommon from './getCommon';
 import { getData, setData } from './asyncStorage';
@@ -57,8 +57,6 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
     }
   };
 
-
-
   const checkGuessInput = async () => {
     setIsEnabledActivityIndicator(true);
     setIsDisabledSendButton(true)
@@ -112,21 +110,6 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
       useNativeDriver: true,
     }).start();
   };
-
-  // const dictionaryToArray = (dict) => {
-  //   console.log(dict)
-  //   let result = [];
-  //   for (let key in dict) {
-  //     if (dict.hasOwnProperty(key)) {
-  //       // Join the array values into a single string separated by commas
-  //       let values = dict[key].join(", ");
-  //       // Construct the string representation and push it into the result array
-  //       result.push(`${key} > ${values}`);
-  //     }
-  //   }
-  //   return result;
-  // };
-
 
   const formatDictionary = (dict) => {
     // Initialize an empty array to hold formatted strings
