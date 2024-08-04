@@ -168,7 +168,7 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
       </Animated.View>
 
       <View style={styles.guessInputHelperView}>
-        <Text style={styles.guessInputHelperText}>Submit button is activated when the guess input is 5 exactly characters long. No spaces or special characters are permitted.</Text>
+        <Text style={styles.guessInputHelperText}>Submit button is only activated when your guess input is exactly 5 characters long. No spaces or special characters are permitted.</Text>
       </View>
       <TextInput
         style={styles.inputStyle}
