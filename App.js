@@ -26,13 +26,12 @@ const App = () => {
   }
 
   const showEndGameMessageWithSecretWord = (message, secretWord) =>{
-    setGameEndTitle(message)
-    setGameEndMessage("Secret word is '" + secretWord + "'\n New game starts now")
-    setnewGameWinwowVisible(true)
+    Alert.alert(message, "Secret word was '" + secretWord + "'\n New game starts now", [
+      {text: 'OK', onPress: () => gameRefresh()},
+    ]);
   }
   
   const closeGameEndWindow = () => {
-    setnewGameWinwowVisible(false)
     gameRefresh()
   }
 
@@ -91,32 +90,6 @@ const App = () => {
         </View>
       </Modal>
 
-      {/* New game modal */}
-
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={newGameWinwowVisible}
-        onRequestClose={() => {
-          closeGameEndWindow();
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalTextHeaders}>{gameEndTitle} </Text>
-            <Text style={styles.modalTextLarge}>{gameEndMessage}</Text>
-            <Pressable
-              style={styles.button}
-              onPress={() => closeGameEndWindow()}>
-              <Text style={styles.textStyle}>Close</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
-
-{/* 
-        <View style={styles.topView}> 
-          <Text style={styles.appTitle}>Elaborate</Text>
-        </View> */}
         <Game newGameStart={gameWin} onNewGameClick={onGiveUpAlert} onShowRulesClick={showRules} key={gameKey}/>
       </View>
     </SafeAreaView>
