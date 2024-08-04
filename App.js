@@ -80,14 +80,17 @@ const App = () => {
                             headerTitleAlign: 'left',
                             headerTitleStyle: {
                                 fontWeight: '400',
-                                fontSize: 14,
+                                fontSize: 14
                             }, headerTitle: props => (
                               <View style={{ flex: 1}}>
                                 <Text style={{fontSize: 18, fontWeight: '200'}}> 
                                   {props.children}
                                 </Text>
                               </View>
-                            )
+                            ),  
+                            headerStyle: {
+                            backgroundColor: '#B0C4DE',
+                            },
                             
                         }} />
       </Stack.Navigator>
@@ -141,7 +144,7 @@ const styles = StyleSheet.create({
   modalView: {
     marginVertical:'35%',
     marginHorizontal:'10%',
-    backgroundColor: '#0c2231',
+    backgroundColor: '#B0C4DE',
     borderRadius: 20,
     padding: 20,
     alignItems: 'center',
@@ -162,25 +165,26 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEFEFE'
   },
   textStyle: {
-    color: '#0c2231',
+    color: 'black',
     textAlign: 'center',
-    fontSize: 14
+    fontSize: 14,
+    fontWeight: 'bold'
   },
   modalText: {
     marginBottom: 15,
     fontSize: 14,
-    color: '#FEFEFE',
+    color: 'black',
   },
   modalTextLarge: {
     marginBottom: 15,
     fontSize: 18,
-    color: '#FEFEFE',
+    color: 'black',
   },
   modalTextHeaders: {
     marginBottom: 15,
     textAlign: 'left',
     fontWeight: 'bold',
-    color: '#FEFEFE',
+    color: 'black',
     fontSize: 20
   },
 });

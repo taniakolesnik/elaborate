@@ -133,8 +133,11 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
   return (
     <View style={styles.container}>
 
-<View style={styles.activityIndicatorStyle}>
-        <ActivityIndicator animating={isEnabledActivityIndicator} size="small" />
+
+      <View style={styles.activityIndicatorStyle}>
+        <ActivityIndicator animating={isEnabledActivityIndicator} 
+        size="large" 
+        color="black"/>
       </View>
 
       <View style={styles.topView}>
@@ -187,6 +190,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
+    marginTop: 18,
     justifyContent: 'center',
   },
   topView: {
@@ -227,8 +231,15 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   activityIndicatorStyle: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    // flexDirection: 'row',
+    // justifyContent: 'space-around',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   guessInputHelperView: {
     marginVertical: 10,
@@ -249,5 +260,6 @@ const styles = StyleSheet.create({
   },
 
 });
+
 
 export default Game;
