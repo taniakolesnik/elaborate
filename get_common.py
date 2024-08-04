@@ -49,11 +49,10 @@ def get_common_word(word1, word2, number):
                     norm_vector = np.linalg.norm(vector)
                     if norm_mean_vector > 0 and norm_vector > 0:
                         similarity_mean = np.dot(mean_vector, vector) / (norm_mean_vector * norm_vector)
-                        similarity_word1 = np.dot(word1_vector, vector) / (norm_word1_vector * norm_vector)
-                        similarity_word2 = np.dot(word2_vector, vector) / (norm_word2_vector * norm_vector)
+                        similarity_secret = np.dot(word2_vector, vector) / (norm_word2_vector * norm_vector)
 
                         if similarity_mean > 0 and similarity_word1 > 0 and similarity_word2 > 0:
-                            similarity[word] = [similarity_mean, similarity_word1, similarity_word2]
+                            similarity[word] = [similarity_mean, similarity_secret]
 
 
 
@@ -61,7 +60,7 @@ def get_common_word(word1, word2, number):
         if similarity:
             sorted_words = sorted(similarity.items(), key=lambda item: item[1], reverse=True)
             # print(sorted_words)
-            top_words = [(word, '%.2f' % score[0], '%.2f' % score[1], '%.2f' % score[2]) for word, score in sorted_words[:int(number)] if word.lower() not in stop_words]
+            top_words = [(word, '%.2f' % score[1]) for word, score in sorted_words[:int(number)] if word.lower() not in stop_words]
             return top_words
         else:
             return "No similar words found"

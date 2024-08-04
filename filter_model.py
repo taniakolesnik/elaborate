@@ -41,7 +41,7 @@ def save_glove_model(model, file_path):
 model = load_glove_model('/Users/tetianakolesnik/Downloads/glove.6B/glove.6B.300d.txt')
 filtered_model = filter_five_letter_words(model)
 filtered_model_noun = get_noun_embeddings(filtered_model)
-# save_glove_model(filtered_model_noun, '/Users/tetianakolesnik/Downloads/glove.6B/glove.6B.300d.5.noun.txt')
+save_glove_model(filtered_model_noun, '/Users/tetianakolesnik/Downloads/glove.6B/glove.6B.300d.5.noun-2.txt')
 stopwords_set = set(stopwords.words('english'))
 words = list(filtered_model_noun.keys())
 words_fintered = [w for w in words if w.lower() not in stopwords_set and len(w) == 5  and '-' not in w and ' ' not in w]

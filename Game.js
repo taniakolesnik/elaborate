@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, Animated, FlatList, ActivityIndicator, StyleSheet, TextInput, Text, View, Button, Pressable } from 'react-native';
+import { Alert, Animated, FlatList, ActivityIndicator, Modal, StyleSheet, TextInput, Text, View, Button, Pressable } from 'react-native';
 import getRandomWord from './getRandomWord'
 import getCommon from './getCommon';
 import { getData, setData } from './asyncStorage';
-import getPosition from './getPosition';
 
-const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
+const Game = ({ newGameStart, onNewGameClick }) => {
 
   const [attempts, setAttempts] = useState(0);
   const [guessList, setGuessList] = useState({});
@@ -17,6 +16,15 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const flatList = React.useRef(null)
   const fadeErrorAnimation = useRef(new Animated.Value(0)).current;
+
+  const [rulesWindowVisible, setRulesWindowVisible] = useState(false);
+  const objective = "Guess the secret English 5-letter word."  
+  const rules =  "You may submit a 5-letter guess. Nouns only!\n\n" 
+  + "After each guess you will receive a list of up to 3 of the most common words 'between' your guess word and the secret one. Their similarity scores to the secret word are also given.\n\n"
+  + "Think about this as you are looking for a secret direction and the game gives you a list of 'change stations' you can use to get there. \n\n"
+  + "There is no limit to the number of guesses you can make.\n\n"
+  + "If you wish to give up, you can start a new game. The secret word of the current game will be revealed to you."
+
 
   useEffect(() => {
     getSecretWord();
@@ -115,6 +123,8 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
     }).start();
   };
 
+  
+
   const fadeOut = () => {
     // Will change fadeAnim value to 0 in 3 seconds
     Animated.timing(fadeErrorAnimation, {
@@ -122,6 +132,10 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
       duration: 1000,
       useNativeDriver: true,
     }).start();
+  };
+
+  const showRules = () => {
+    setRulesWindowVisible(true)
   };
 
   const formatDictionary = (dict) => {
@@ -154,13 +168,13 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
       </View>
 
       <View style={styles.topView}>
-        <Pressable onPress={onShowRulesClick}>
-          <Text style={styles.topViewSmall}>Rules</Text>
+        <Pressable onPress={showRules}>
+          <Text style={[styles.topViewSmall, {textDecorationLine: 'underline'}]}>Rules</Text>
         </Pressable>
         <Text style={styles.topViewSmall}>best# {bestScore}</Text>
-        <Text style={styles.topViewSmall}>attempts# {attempts}</Text>
+        <Text style={styles.topViewLarge}>attempts# {attempts}</Text>
         <Pressable onPress={onNewGameClick}>
-          <Text style={styles.topViewSmall}>Give Up</Text>
+          <Text style={[styles.topViewSmall, {textDecorationLine: 'underline'}]}>Give Up</Text>
         </Pressable>
       </View>
 
@@ -193,8 +207,35 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
       />
 
       <View style={styles.submitButtonViewStyle}>
-        <Button elevation="2" color="#0c2231" disabled={isDisabledSendButton} title="Submit" onPress={checkGuessInput} />
+        <Button elevation="2" 
+        color="#0c2231" 
+        disabled={isDisabledSendButton}
+        title="Submit" 
+        onPress={checkGuessInput} />
       </View>
+
+                    {/* Rules modal */}
+                    <Modal
+          animationType="fade"
+          transparent={true}
+          visible={rulesWindowVisible}
+          onRequestClose={() => {
+            setRulesWindowVisible(false);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalTextHeaders}>Objective: </Text>
+              <Text style={styles.modalText}>{objective}</Text>
+              <Text style={styles.modalTextHeaders}>Gameplay:</Text>
+              <Text style={styles.modalText}>{rules}</Text>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setRulesWindowVisible(false)}>
+                <Text style={styles.textStyle}>Close</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
 
     </View>
   );
@@ -211,13 +252,15 @@ const styles = StyleSheet.create({
   topView: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'baseline',
     marginBottom: 20
   },
   topViewLarge: {
-    fontSize: 18,
+    fontWeight: '300', 
+    fontSize: 22,
   },
   topViewSmall: {
+    fontWeight: '300',
     fontSize: 16
   },
   inputStyle: {
@@ -268,6 +311,52 @@ const styles = StyleSheet.create({
   submitButtonViewStyle: {
     borderRadius: 10,
     overflow: 'hidden'
+  },
+  modalText: {
+    marginBottom: 15,
+    fontSize: 14,
+    color: '#1e1e1e',
+  },
+  modalTextLarge: {
+    marginBottom: 15,
+    fontSize: 18,
+    color: '#1e1e1e',
+  },
+  modalTextHeaders: {
+    marginBottom: 15,
+    textAlign: 'left',
+    fontWeight: 'bold',
+    color: '#1e1e1e',
+    fontSize: 20
+  },  
+  modalView: {
+    marginVertical:'35%',
+    marginHorizontal:'10%',
+    backgroundColor: '#B0C4DE',
+    borderRadius: 20,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 5,
+      height: 10,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 4
+    ,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: '#FEFEFE'
+  },  
+  textStyle: {
+    color: '#1e1e1e',
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: 'bold'
   },
 
 });
