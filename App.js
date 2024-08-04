@@ -2,8 +2,12 @@ import { Alert, StyleSheet, Text, View, Modal, Pressable, SafeAreaView } from 'r
 import Game from './Game';
 import React, { useState } from 'react';
 import { getData } from './asyncStorage';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const App = () => {
+
+  const Stack = createNativeStackNavigator();
 
   const [gameKey, setGameKey] = useState(0);
   // https://reactnative.dev/docs/modal
@@ -62,37 +66,57 @@ const App = () => {
       {text: 'OK', onPress: () => giveUp()},
     ]);
 
+
+    function GameScreen() {
+      return (
+          <Game newGameStart={gameWin} onNewGameClick={onGiveUpAlert} onShowRulesClick={showRules} key={gameKey}/>
+      );
+    }
+
   return (
-
-
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-      {/* Rules modal */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={rulesWindowVisible}
-        onRequestClose={() => {
-          setRulesWindowVisible(false);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalTextHeaders}>Objective: </Text>
-            <Text style={styles.modalText}>{objective}</Text>
-            <Text style={styles.modalTextHeaders}>Gameplay:</Text>
-            <Text style={styles.modalText}>{rules}</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setRulesWindowVisible(false)}>
-              <Text style={styles.textStyle}>Close</Text>
-            </Pressable>
+<NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="elaborate" component={GameScreen} options={{
+                            headerTitleAlign: 'left',
+                            headerTitleStyle: {
+                                fontWeight: '400',
+                                fontSize: 14,
+                            }, headerTitle: props => (
+                              <View style={{ flex: 1}}>
+                                <Text style={{fontSize: 18, fontWeight: '200'}}> 
+                                  {props.children}
+                                </Text>
+                              </View>
+                            )
+                            
+                        }} />
+      </Stack.Navigator>
+      
+              {/* Rules modal */}
+              <Modal
+          animationType="fade"
+          transparent={true}
+          visible={rulesWindowVisible}
+          onRequestClose={() => {
+            setRulesWindowVisible(false);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalTextHeaders}>Objective: </Text>
+              <Text style={styles.modalText}>{objective}</Text>
+              <Text style={styles.modalTextHeaders}>Gameplay:</Text>
+              <Text style={styles.modalText}>{rules}</Text>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setRulesWindowVisible(false)}>
+                <Text style={styles.textStyle}>Close</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+  
+    </NavigationContainer>
 
-        <Game newGameStart={gameWin} onNewGameClick={onGiveUpAlert} onShowRulesClick={showRules} key={gameKey}/>
-      </View>
-    </SafeAreaView>
   );
 };
 

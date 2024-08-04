@@ -133,17 +133,15 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
   return (
     <View style={styles.container}>
 
-      <View style={styles.activityIndicatorStyle}>
+<View style={styles.activityIndicatorStyle}>
         <ActivityIndicator animating={isEnabledActivityIndicator} size="small" />
       </View>
-
-
 
       <View style={styles.topView}>
         <Pressable onPress={onShowRulesClick}>
           <Text style={styles.topViewSmall}>Rules</Text>
         </Pressable>
-        <Text style={styles.topViewLarge}>Attemts# {attempts}</Text>
+        <Text style={styles.topViewSmall}>attempts# {attempts}</Text>
         <Pressable onPress={onNewGameClick}>
           <Text style={styles.topViewSmall}>Give Up</Text>
         </Pressable>
