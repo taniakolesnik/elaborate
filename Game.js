@@ -45,7 +45,6 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
   const handleInputChange = (input) => {
     if (secretWord != "NO_CONNECTION"){
       fadeOut();
-      setIsDisabledSendButton(true);
     } 
 
     const inputLowerCase = input.toLowerCase()
@@ -144,6 +143,7 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
         <Pressable onPress={onShowRulesClick}>
           <Text style={styles.topViewSmall}>Rules</Text>
         </Pressable>
+        <Text style={styles.topViewSmall}>best# {attempts}</Text>
         <Text style={styles.topViewSmall}>attempts# {attempts}</Text>
         <Pressable onPress={onNewGameClick}>
           <Text style={styles.topViewSmall}>Give Up</Text>
@@ -203,11 +203,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   topViewSmall: {
-    fontSize: 14
+    fontSize: 16
   },
   inputStyle: {
     height: 40,
-    borderColor: '#143952',
     borderWidth: 1,
     paddingHorizontal: 10,
     marginBottom: '3%',
@@ -216,23 +215,20 @@ const styles = StyleSheet.create({
   guessItemStyle: {
     padding: 8,
     marginTop: 10,
-    borderBottomWidth: 1,
-    backgroundColor: '#143952',
+    backgroundColor: '#B0C4DE',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
-      width: 5,
+      width: 10,
       height: 10,
     },
-    elevation: 2,
+    elevation: 3,
   },
   guessTextStyle: {
     fontSize: 14,
-    color: 'white'
+    color: '#1e1e1e'
   },
   activityIndicatorStyle: {
-    // flexDirection: 'row',
-    // justifyContent: 'space-around',
     position: 'absolute',
     left: 0,
     right: 0,

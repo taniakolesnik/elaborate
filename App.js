@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { getData } from './asyncStorage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { MenuScreen } from './MenuScreen';
+import { MenuProvider } from 'react-native-popup-menu';
 
 const App = () => {
 
@@ -74,9 +76,15 @@ const App = () => {
     }
 
   return (
+<MenuProvider>
 <NavigationContainer>
+      
       <Stack.Navigator>
-        <Stack.Screen name="elaborate" component={GameScreen} options={{
+        <Stack.Screen name="elaborate" component={GameScreen} 
+                            navigationOptions={{
+                              headerLeft: 'test'
+                            }}
+                            options={{
                             headerTitleAlign: 'left',
                             headerTitleStyle: {
                                 fontWeight: '400',
@@ -89,11 +97,12 @@ const App = () => {
                               </View>
                             ),  
                             headerStyle: {
-                            backgroundColor: '#B0C4DE',
+                            backgroundColor: '#decab0',
                             },
                             
                         }} />
       </Stack.Navigator>
+      
       
               {/* Rules modal */}
               <Modal
@@ -119,7 +128,8 @@ const App = () => {
         </Modal>
   
     </NavigationContainer>
-
+    
+    </MenuProvider>
   );
 };
 
@@ -165,7 +175,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEFEFE'
   },
   textStyle: {
-    color: 'black',
+    color: '#1e1e1e',
     textAlign: 'center',
     fontSize: 14,
     fontWeight: 'bold'
@@ -173,18 +183,18 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     fontSize: 14,
-    color: 'black',
+    color: '#1e1e1e',
   },
   modalTextLarge: {
     marginBottom: 15,
     fontSize: 18,
-    color: 'black',
+    color: '#1e1e1e',
   },
   modalTextHeaders: {
     marginBottom: 15,
     textAlign: 'left',
     fontWeight: 'bold',
-    color: 'black',
+    color: '#1e1e1e',
     fontSize: 20
   },
 });
