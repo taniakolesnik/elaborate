@@ -17,9 +17,9 @@ const App = () => {
   const [gameEndTitle, setGameEndTitle] = useState("");
 
   const objective = "Guess the secret English 5-letter word."  
-  const rules =  "You must submit a guess that is a 5-letter word also. \n\n" 
-  + "After each guess, you will receive feedback in the form of a list of the most common words between a guess word and a secret one.\n\n"
-  + "This feedback helps you narrow down the possible secret word.\n\n"
+  const rules =  "You may submit a 5-letter guess. \n\n" 
+  + "After each guess, you will receive a list up to 3 of the most common words 'between' your guess word and the secret one and their similarity score to the secret word.\n\n"
+  + "Think about this as you are looking for a secret direction and the game gives you as 'change stations' you can use. And how close they are to the secret word.\n\n"
   + "There is no limit to the number of guesses you can make.\n\n"
   + "If you wish to give up, you can start a new game. The secret word of the current game will be revealed to you."
 
