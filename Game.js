@@ -13,12 +13,14 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
   const [isDisabledSendButton, setIsDisabledSendButton] = useState(true);
   const [isEnabledActivityIndicator, setIsEnabledActivityIndicator] = useState(false);
   const [secretWord, setSecretWord] = useState('');
+  const [bestScore, setBestScore] = useState(100);
   const [errorMessage, setErrorMessage] = useState('');
   const flatList = React.useRef(null)
   const fadeErrorAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     getSecretWord();
+    getBestScore();
   }, []);
 
   const getSecretWord = async () => {
@@ -34,6 +36,17 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
       }
     } catch (error) {
       console.error('Error in setRandomWord:', error);
+    }
+  };
+
+  const getBestScore = async () => {
+    try {
+      const response = await getData("bestScore");
+      if (response !== null) {
+        setBestScore(response)
+      } 
+    } catch (error) {
+      console.error('Error in getBestScore:', error);
     }
   };
 
@@ -61,6 +74,7 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
     setIsDisabledSendButton(true)
     if (secretWord == inputGuess) {
       newGameStart();
+      setData("bestScore", String(attempts))
     } else if (inputGuess in guessList) {
       setInputGuess("");
       setErrorMessage("This guess word was already used")
@@ -143,7 +157,7 @@ const Game = ({ newGameStart, onNewGameClick, onShowRulesClick }) => {
         <Pressable onPress={onShowRulesClick}>
           <Text style={styles.topViewSmall}>Rules</Text>
         </Pressable>
-        <Text style={styles.topViewSmall}>best# {attempts}</Text>
+        <Text style={styles.topViewSmall}>best# {bestScore}</Text>
         <Text style={styles.topViewSmall}>attempts# {attempts}</Text>
         <Pressable onPress={onNewGameClick}>
           <Text style={styles.topViewSmall}>Give Up</Text>
@@ -191,6 +205,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     marginTop: 18,
+    marginBottom: 14,
     justifyContent: 'center',
   },
   topView: {

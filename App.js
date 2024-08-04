@@ -14,14 +14,10 @@ const App = () => {
   const [gameKey, setGameKey] = useState(0);
   // https://reactnative.dev/docs/modal
   const [rulesWindowVisible, setRulesWindowVisible] = useState(false);
-  const [newGameWinwowVisible, setnewGameWinwowVisible] = useState(false);
-  const [gameEndMessage, setGameEndMessage] = useState("");
-  const [gameEndTitle, setGameEndTitle] = useState("");
-
   const objective = "Guess the secret English 5-letter word."  
-  const rules =  "You may submit a 5-letter guess. \n\n" 
-  + "After each guess, you will receive a list up to 3 of the most common words 'between' your guess word and the secret one and their similarity score to the secret word.\n\n"
-  + "Think about this as you are looking for a secret direction and the game gives you as 'change stations' you can use. And how close they are to the secret word.\n\n"
+  const rules =  "You may submit a 5-letter guess. Nouns only!\n\n" 
+  + "After each guess you will receive a list of up to 3 of the most common words 'between' your guess word and the secret one. Their similarity scores to the secret word are also given.\n\n"
+  + "Think about this as you are looking for a secret direction and the game gives you a list of 'change stations' you can use to get there. \n\n"
   + "There is no limit to the number of guesses you can make.\n\n"
   + "If you wish to give up, you can start a new game. The secret word of the current game will be revealed to you."
 
@@ -32,9 +28,10 @@ const App = () => {
   }
 
   const showEndGameMessageWithSecretWord = (message, secretWord) =>{
-    Alert.alert(message, "Secret word was '" + secretWord + "'\n New game starts now", [
+    Alert.alert(message, "Secret word was '" + secretWord + "'\nNew game starts now", [
       {text: 'OK', onPress: () => gameRefresh()},
-    ]);
+    ],
+    {cancelable: false},);
   }
   
   const closeGameEndWindow = () => {
@@ -80,24 +77,24 @@ const App = () => {
 <NavigationContainer>
       
       <Stack.Navigator>
-        <Stack.Screen name="elaborate" component={GameScreen} 
+        <Stack.Screen name="midst" component={GameScreen} 
                             navigationOptions={{
                               headerLeft: 'test'
                             }}
                             options={{
                             headerTitleAlign: 'left',
                             headerTitleStyle: {
-                                fontWeight: '400',
-                                fontSize: 14
+                                fontWeight: '100',
+                                fontSize: 30
                             }, headerTitle: props => (
                               <View style={{ flex: 1}}>
-                                <Text style={{fontSize: 18, fontWeight: '200'}}> 
+                                <Text style={{fontSize: 30, fontWeight: '100'}}> 
                                   {props.children}
                                 </Text>
                               </View>
                             ),  
                             headerStyle: {
-                            backgroundColor: '#decab0',
+                            backgroundColor: '#bcaaaa',
                             },
                             
                         }} />
