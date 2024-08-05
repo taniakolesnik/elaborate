@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { getData } from './asyncStorage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Confetti } from "native-confetti";
 
 
 const App = () => {
@@ -64,10 +63,7 @@ const App = () => {
 <NavigationContainer>
       
       <Stack.Navigator>
-        <Stack.Screen name="midst" component={GameScreen} 
-                            navigationOptions={{
-                              headerLeft: 'test'
-                            }}
+        <Stack.Screen name=" midst" component={GameScreen} 
                             options={{
                             headerTitleAlign: 'left',
                             headerTitleStyle: {

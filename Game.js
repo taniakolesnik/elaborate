@@ -91,11 +91,11 @@ const Game = ({ newGameStart, onNewGameClick }) => {
       const response = await getCommon(inputGuess, secretWord);
       if (response == "One or both words not in vocabulary") {
         setInputGuess("");
-        setErrorMessage("Cannot find this word in my vocabulary\nPlease check spelling")
+        setErrorMessage("Cannot find this word in my vocabulary.")
         fadeIn()
       } else if (response == "error") {
           setInputGuess("");
-          setErrorMessage("No connection to the server\nPlease try later")
+          setErrorMessage("No connection to the server. Please try later")
           fadeIn()
       } else {
         gustListUpdated = guessList
@@ -168,14 +168,18 @@ const Game = ({ newGameStart, onNewGameClick }) => {
       </View>
 
       <View style={styles.topView}>
+      <View style={styles.topViewClicable}>
         <Pressable onPress={showRules}>
-          <Text style={[styles.topViewSmall, {textDecorationLine: 'underline'}]}>Rules</Text>
+          <Text style={styles.topViewSmall}>Rules</Text>
         </Pressable>
+        </View>
         <Text style={styles.topViewSmall}>best# {bestScore}</Text>
         <Text style={styles.topViewLarge}>attempts# {attempts}</Text>
+        <View style={styles.topViewClicable}>
         <Pressable onPress={onNewGameClick}>
-          <Text style={[styles.topViewSmall, {textDecorationLine: 'underline'}]}>Give Up</Text>
+          <Text style={styles.topViewSmall}>Give Up</Text>
         </Pressable>
+        </View>
       </View>
 
 
@@ -207,8 +211,7 @@ const Game = ({ newGameStart, onNewGameClick }) => {
       />
 
       <View style={styles.submitButtonViewStyle}>
-        <Button elevation="2" 
-        color="#0c2231" 
+        <Button color="#333a40" style={styles.button}
         disabled={isDisabledSendButton}
         title="Submit" 
         onPress={checkGuessInput} />
@@ -251,40 +254,56 @@ const styles = StyleSheet.create({
   },
   topView: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'baseline',
-    marginBottom: 20
+    marginBottom: 10,
+    marginHorizontal: 12
   },
   topViewLarge: {
     fontWeight: '300', 
-    fontSize: 22,
+    fontSize: 16,
   },
   topViewSmall: {
     fontWeight: '300',
     fontSize: 16
+  },
+  topViewClicable: {
+    backgroundColor: 'lightgrey', 
+    paddingVertical: 4, 
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 5,
+      height: 5,
+    },
+    elevation: 3,
   },
   inputStyle: {
     height: 40,
     borderWidth: 1,
     paddingHorizontal: 10,
     marginBottom: '3%',
-    borderRadius: 10
+    borderRadius: 10,
+    marginHorizontal: 12
   },
   guessItemStyle: {
-    padding: 8,
-    marginTop: 10,
-    backgroundColor: '#B0C4DE',
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    marginHorizontal: 12,
+    marginBottom: 10,
+    backgroundColor: '#c7cdd2',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
-      width: 10,
-      height: 10,
+      width: 5,
+      height: 5,
     },
     elevation: 3,
   },
   guessTextStyle: {
     fontSize: 14,
-    color: '#1e1e1e'
+    color: 'black'
   },
   activityIndicatorStyle: {
     position: 'absolute',
@@ -296,21 +315,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   guessInputHelperView: {
-    marginVertical: 10,
-    marginHorizontal: 1,
+    marginBottom: 8,
+    marginTop: 3,
+    marginHorizontal: 15
   },
   guessInputHelperText: {
     fontSize: 11,
     color: 'grey',
-    fontFamily: 'serif'
+    fontFamily: 'serif',
   },
   guessInputHelperTextErorr: {
     fontSize: 13,
-    color: 'red'
+    color: 'red',
+    marginHorizontal: 14
   },
   submitButtonViewStyle: {
     borderRadius: 10,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    marginHorizontal: 12
   },
   modalText: {
     marginBottom: 15,
@@ -332,13 +354,13 @@ const styles = StyleSheet.create({
   modalView: {
     marginVertical:'35%',
     marginHorizontal:'10%',
-    backgroundColor: '#B0C4DE',
+    backgroundColor: '#c7cdd2',
     borderRadius: 20,
     padding: 20,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
-      width: 5,
+      width: 10,
       height: 10,
     },
     shadowOpacity: 0.4,
