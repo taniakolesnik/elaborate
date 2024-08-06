@@ -162,7 +162,8 @@ const Game = ({ newGameStart, onNewGameClick }) => {
 
 
       <View style={styles.activityIndicatorStyle}>
-        <ActivityIndicator animating={isEnabledActivityIndicator} 
+        <ActivityIndicator 
+        animating={isEnabledActivityIndicator} 
         size="large" 
         color="black"/>
       </View>
@@ -252,6 +253,13 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     justifyContent: 'center',
   },
+  activityIndicatorStyle: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 10,
+    zIndex:100
+  },
   topView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -304,15 +312,6 @@ const styles = StyleSheet.create({
   guessTextStyle: {
     fontSize: 14,
     color: 'black'
-  },
-  activityIndicatorStyle: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   guessInputHelperView: {
     marginBottom: 8,
