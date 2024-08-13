@@ -159,16 +159,7 @@ const Game = ({ newGameStart, onNewGameClick }) => {
 
   return (
     <View style={styles.container}>
-
-
-      <View style={styles.activityIndicatorStyle}>
-        <ActivityIndicator 
-        animating={isEnabledActivityIndicator} 
-        size="large" 
-        color="black"/>
-      </View>
-
-      <View style={styles.topView}>
+    <View style={styles.topView}>
       <View style={styles.topViewClicable}>
         <Pressable onPress={showRules}>
           <Text style={styles.topViewSmall}>Rules</Text>
@@ -216,6 +207,11 @@ const Game = ({ newGameStart, onNewGameClick }) => {
         disabled={isDisabledSendButton}
         title="Submit" 
         onPress={checkGuessInput} />
+      <ActivityIndicator 
+        animating={isEnabledActivityIndicator} 
+        // animating='true'
+        size="small" 
+        color="black"/>
       </View>
 
                     {/* Rules modal */}
@@ -257,8 +253,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    top: 10,
-    zIndex:100
+    top: 10
   },
   topView: {
     flexDirection: 'row',
@@ -331,7 +326,9 @@ const styles = StyleSheet.create({
   submitButtonViewStyle: {
     borderRadius: 10,
     overflow: 'hidden',
-    marginHorizontal: 12
+    marginHorizontal: 12,
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   modalText: {
     marginBottom: 15,
