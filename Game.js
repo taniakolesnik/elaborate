@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, Animated, FlatList, ActivityIndicator, Modal, StyleSheet, TextInput, Text, View, Button, Pressable } from 'react-native';
-import getRandomWord from './getRandomWord'
-import getCommon from './getCommon';
+import { Animated, FlatList, ActivityIndicator, Modal, StyleSheet, TextInput, Text, View, Button, Pressable } from 'react-native';
+import {getRandomWord, getCommon} from './gameUtils'
 import { getData, setData } from './asyncStorage';
 
 const Game = ({ newGameStart, onNewGameClick }) => {
@@ -19,12 +18,7 @@ const Game = ({ newGameStart, onNewGameClick }) => {
 
   const [rulesWindowVisible, setRulesWindowVisible] = useState(false);
   const objective = "Guess the secret English 5-letter word."  
-  const rules =  "You may submit a 5-letter guess. Nouns only!\n\n" 
-  + "After each guess you will receive a list of up to 3 of the most common words 'between' your guess word and the secret one. Their similarity scores to the secret word are also given.\n\n"
-  + "Think about this as you are looking for a secret direction and the game gives you a list of 'change stations' you can use to get there. \n\n"
-  + "There is no limit to the number of guesses you can make.\n\n"
-  + "If you wish to give up, you can start a new game. The secret word of the current game will be revealed to you."
-
+  
 
   useEffect(() => {
     getSecretWord();
@@ -115,7 +109,6 @@ const Game = ({ newGameStart, onNewGameClick }) => {
   );
 
   const fadeIn = () => {
-    // Will change fadeAnim value to 1 in 5 seconds
     Animated.timing(fadeErrorAnimation, {
       toValue: 1,
       duration: 1000,
@@ -123,10 +116,7 @@ const Game = ({ newGameStart, onNewGameClick }) => {
     }).start();
   };
 
-  
-
   const fadeOut = () => {
-    // Will change fadeAnim value to 0 in 3 seconds
     Animated.timing(fadeErrorAnimation, {
       toValue: 0,
       duration: 1000,

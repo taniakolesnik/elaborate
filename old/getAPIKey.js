@@ -1,4 +1,4 @@
-import { db } from "./firebaseConfig.js";
+import { db } from "../firebaseConfig.js";
 import { doc, getDoc } from "firebase/firestore";
   
   export const fetchAPIKey = async (apiClient) => {

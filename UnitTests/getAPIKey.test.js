@@ -1,5 +1,5 @@
-import { getAPIKey } from './getAPIKey';
-import { fetchAPIKey } from './getAPIKey';
+import { getAPIKey } from '../old/getAPIKey';
+import { fetchAPIKey } from '../old/getAPIKey';
 
 test('getAPIKey should return "testKey" when apiClient is "test"', async () => {
     const result = await getAPIKey('test');

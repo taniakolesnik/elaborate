@@ -1,7 +1,7 @@
 import axios from 'axios';
 // import { fetchAPIKey } from "./getAPIKey.js";
 
-const getRandomWord = async () => {
+export const getRandomWord = async () => {
 
     // const apiURL = "https://wordsapiv1.p.rapidapi.com/words/?random=true&lettersMin=7&lettersMax=12&partOfSpeech=verb&frequencyMin=2.5"
     const apiURL = "http://taniakolesnik.pythonanywhere.com/random"
@@ -22,4 +22,17 @@ const getRandomWord = async () => {
     return secret
 }
 
-export default getRandomWord;
+export const getCommon = async (inputMessage, secretWord) => {
+  
+    const apiURL = "http://taniakolesnik.pythonanywhere.com/common_word?word1=" + inputMessage.toLowerCase() 
+    + "&word2=" + secretWord.toLowerCase() + "&top=3";
+    console.log(apiURL)
+    try {
+      const response = await axios.get(apiURL);
+      console.log(response.data.common)
+      return response.data.common; 
+  
+    } catch (error) {
+      return "error";
+    }
+  };
