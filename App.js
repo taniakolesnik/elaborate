@@ -1,90 +1,69 @@
+import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, View, Modal, Pressable, SafeAreaView } from 'react-native';
 import Game from './Game';
-import React, { useState } from 'react';
-import { getData } from './asyncStorage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { 
+  startNewGame, 
+  showEndGameMessageWithSecretWord, 
+  gameRefresh, 
+  giveUp, 
+  gameWin, 
+  onGiveUpAlert 
+} from './appUtils';
 
 const App = () => {
 
   const Stack = createNativeStackNavigator();
 
   const [gameKey, setGameKey] = useState(0);
- 
 
-  const startNewGame = async (message) => {
-    const secretWord = await getData("secretWord")
-    showEndGameMessageWithSecretWord(message, secretWord)
-  }
-
-  const showEndGameMessageWithSecretWord = (message, secretWord) =>{
-    Alert.alert(message, "Secret word was '" + secretWord + "'\nNew game starts now", [
-      {text: 'OK', onPress: () => gameRefresh()},
-    ],
-    {cancelable: false},);
-  }
-  
-  const gameRefresh = async () => {
-      setGameKey(prevKey => prevKey + 1);
-    }
-
-  const giveUp = () => {
-    const message = ""
-    startNewGame(message)
+  const startNewGameHandler = async (message) => {
+    startNewGame(message, () => gameRefresh(setGameKey));
   };
 
-  const gameWin = () => {
-    const message = "You won!"
-    startNewGame(message)
+  const giveUpWrapper = () => {
+    giveUp(startNewGameHandler);
   };
 
-  // const showRules = () => {
-  //   setRulesWindowVisible(true)
-  // };
+  const gameWinHandler = () => {
+    gameWin(startNewGameHandler);
+  };
 
-  const onGiveUpAlert = () =>
-    Alert.alert('Give up', 'Are you sure you want to give up?', [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {text: 'OK', onPress: () => giveUp()},
-    ]);
+  const onGiveUpAlertHandler = () => {
+    onGiveUpAlert(giveUpWrapper);
+  };
 
-
-    function GameScreen() {
-      return (
-          <Game newGameStart={gameWin} onNewGameClick={onGiveUpAlert}  key={gameKey}/>
-      );
-    }
+  function GameScreen() {
+    return (
+      <Game newGameStart={gameWinHandler} onNewGameClick={onGiveUpAlertHandler} key={gameKey} />
+    );
+  }
 
   return (
-<NavigationContainer>
-      
+    <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name=" midst" component={GameScreen} 
-                            options={{
-                            headerTitleAlign: 'left',
-                            headerTitleStyle: {
-                                fontWeight: '100',
-                                fontSize: 30
-                            }, headerTitle: props => (
-                              <View style={{ flex: 1}}>
-                                <Text style={{fontSize: 30, fontWeight: '100'}}> 
-                                  {props.children}
-                                </Text>
-                              </View>
-                            ),  
-                            headerStyle: {
-                            backgroundColor: '#bcaaaa',
-                            },
-                            
-                        }} />
-      </Stack.Navigator>
+        <Stack.Screen name="midst" component={GameScreen}
+          options={{
+            headerTitleAlign: 'left',
+            headerTitleStyle: {
+              fontWeight: '100',
+              fontSize: 30
+            }, headerTitle: props => (
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 30, fontWeight: '100' }}>
+                  {props.children}
+                </Text>
+              </View>
+            ),
+            headerStyle: {
+              backgroundColor: '#bcaaaa',
+            },
 
+          }} />
+      </Stack.Navigator>
     </NavigationContainer>
-    
   );
 };
 
