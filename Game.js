@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Animated, FlatList, ActivityIndicator, Modal, StyleSheet, TextInput, Text, View, Button, Pressable } from 'react-native';
-import {getRandomWord, getCommon} from './gameUtils'
+import {getRandomWord, getCommon, validateInput} from './gameUtils'
 import { getData, setData } from './asyncStorage';
 
 const Game = ({ newGameStart, onNewGameClick }) => {
@@ -50,11 +50,6 @@ const Game = ({ newGameStart, onNewGameClick }) => {
     } catch (error) {
       console.error('Error in getBestScore:', error);
     }
-  };
-
-  const validateInput = (input) => {
-    const regex = /^[A-Za-z]+$/;
-    return input.length === 5 && regex.test(input);
   };
 
   const handleInputChange = (input) => {

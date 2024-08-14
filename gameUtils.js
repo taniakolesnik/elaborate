@@ -36,3 +36,8 @@ export const getCommon = async (inputMessage, secretWord) => {
       return "error";
     }
   };
+
+  export const validateInput = (input) => {
+    const regex = /^[A-Za-z]+$/;
+    return input.length === 5 && regex.test(input);
+  };

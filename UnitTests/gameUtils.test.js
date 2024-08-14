@@ -1,6 +1,6 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { getRandomWord, getCommon } from '../gameUtils'; 
+import { getRandomWord, getCommon, validateInput } from '../gameUtils'; 
 
 describe('getRandomWord tests', () => {
     let mock;
@@ -83,4 +83,32 @@ describe('getCommon tests', () => {
         const requestUrl = mock.history.get[0].url;
         expect(requestUrl).toBe(expectedUrl);
     });
+});
+
+
+describe('validateInput', () => {
+  it('should return true for a valid input of exactly 5 alphabetic characters', () => {
+    expect(validateInput('abcde')).toBe(true);
+  });
+
+  it('should return false for input with less than 5 characters', () => {
+    expect(validateInput('abcd')).toBe(false);
+  });
+
+  it('should return false for input with more than 5 characters', () => {
+    expect(validateInput('abcdef')).toBe(false);
+  });
+
+  it('should return false for input with non-alphabetic characters', () => {
+    expect(validateInput('abc1e')).toBe(false);
+    expect(validateInput('abc@e')).toBe(false);
+  });
+
+  it('should return false for an empty string', () => {
+    expect(validateInput('')).toBe(false);
+  });
+
+  it('should return false for input with spaces', () => {
+    expect(validateInput('abc e')).toBe(false);
+  });
 });
