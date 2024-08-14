@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Animated, FlatList, ActivityIndicator, Modal, StyleSheet, TextInput, Text, View, Button, Pressable } from 'react-native';
-import {getRandomWord, getCommon, validateInput} from './gameUtils'
+import {getRandomWord, getCommon, validateInput, formatDictionary} from './gameUtils'
 import { getData, setData } from './asyncStorage';
 
 const Game = ({ newGameStart, onNewGameClick }) => {
@@ -18,6 +18,11 @@ const Game = ({ newGameStart, onNewGameClick }) => {
 
   const [rulesWindowVisible, setRulesWindowVisible] = useState(false);
   const objective = "Guess the secret English 5-letter word."  
+  const rules =  "You may submit a 5-letter guess. \n\n" 
+  + "After each guess, you will receive a list up to 3 of the most common words 'between' your guess word and the secret one and their similarity score to the secret word.\n\n"
+  + "Think about this as you are looking for a secret direction and the game gives you as 'change stations' you can use. And how close they are to the secret word.\n\n"
+  + "There is no limit to the number of guesses you can make.\n\n"
+  + "If you wish to give up, you can start a new game. The secret word of the current game will be revealed to you."
   
 
   useEffect(() => {
@@ -121,25 +126,6 @@ const Game = ({ newGameStart, onNewGameClick }) => {
 
   const showRules = () => {
     setRulesWindowVisible(true)
-  };
-
-  const formatDictionary = (dict) => {
-    // Initialize an empty array to hold formatted strings
-    const result = [];
-  
-    // Iterate over each key-value pair in the dictionary
-    for (const [key, entries] of Object.entries(dict)) {
-      // Map the entries to the desired format and join them with a comma
-      const formattedEntries = entries
-        .map(([word, value]) => `${word} (${value})`)
-        .join(', ');
-  
-      // Create the formatted string for the current key
-      result.push(`${key}: ${formattedEntries}`);
-    }
-  
-    // Join all formatted strings with a newline
-    return result
   };
 
   return (

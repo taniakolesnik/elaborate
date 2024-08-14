@@ -41,3 +41,22 @@ export const getCommon = async (inputMessage, secretWord) => {
     const regex = /^[A-Za-z]+$/;
     return input.length === 5 && regex.test(input);
   };
+
+  export const formatDictionary = (dict) => {
+    // Initialize an empty array to hold formatted strings
+    const result = [];
+  
+    // Iterate over each key-value pair in the dictionary
+    for (const [key, entries] of Object.entries(dict)) {
+      // Map the entries to the desired format and join them with a comma
+      const formattedEntries = entries
+        .map(([word, value]) => `${word} (${value})`)
+        .join(', ');
+  
+      // Create the formatted string for the current key
+      result.push(`${key}: ${formattedEntries}`);
+    }
+  
+    // Join all formatted strings with a newline
+    return result
+  };

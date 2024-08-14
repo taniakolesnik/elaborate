@@ -1,8 +1,8 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { getRandomWord, getCommon, validateInput } from '../gameUtils'; 
+import { getRandomWord, getCommon, validateInput, formatDictionary } from '../gameUtils'; 
 
-describe('getRandomWord tests', () => {
+describe('getRandomWord', () => {
     let mock;
 
     beforeAll(() => {
@@ -35,7 +35,7 @@ describe('getRandomWord tests', () => {
 
 
 
-describe('getCommon tests', () => {
+describe('getCommon', () => {
     let mock;
 
     beforeAll(() => {
@@ -112,3 +112,48 @@ describe('validateInput', () => {
     expect(validateInput('abc e')).toBe(false);
   });
 });
+
+
+describe('formatDictionary', () => {
+    it('should format a dictionary with multiple key-value pairs', () => {
+      const input = {
+        fruits: [['apple', 5], ['banana', 3]],
+        vegetables: [['carrot', 2], ['broccoli', 4]],
+      };
+      const expectedOutput = [
+        'fruits: apple (5), banana (3)',
+        'vegetables: carrot (2), broccoli (4)'
+      ];
+      expect(formatDictionary(input)).toEqual(expectedOutput);
+    });
+  
+    it('should return an empty array for an empty dictionary', () => {
+      const input = {};
+      const expectedOutput = [];
+      expect(formatDictionary(input)).toEqual(expectedOutput);
+    });
+  
+    it('should handle keys with multiple entries', () => {
+      const input = {
+        letters: [['a', 1], ['b', 2], ['c', 3]],
+      };
+      const expectedOutput = ['letters: a (1), b (2), c (3)'];
+      expect(formatDictionary(input)).toEqual(expectedOutput);
+    });
+  
+    it('should handle a dictionary with an empty array for a key', () => {
+      const input = {
+        emptyKey: [],
+      };
+      const expectedOutput = ['emptyKey: '];
+      expect(formatDictionary(input)).toEqual(expectedOutput);
+    });
+  
+    it('should handle a dictionary with one key and one entry', () => {
+      const input = {
+        singleKey: [['word', 1]],
+      };
+      const expectedOutput = ['singleKey: word (1)'];
+      expect(formatDictionary(input)).toEqual(expectedOutput);
+    });
+  });
