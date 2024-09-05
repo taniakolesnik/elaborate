@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, Text, View, Modal, Pressable, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View} from 'react-native';
 import Game from './Game';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';

@@ -1,5 +1,4 @@
 import axios from 'axios';
-// import { fetchAPIKey } from "./getAPIKey.js";
 
 export const getRandomWord = async () => {
 

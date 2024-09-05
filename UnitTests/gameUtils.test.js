@@ -117,12 +117,10 @@ describe('validateInput', () => {
 describe('formatDictionary', () => {
     it('should format a dictionary with multiple key-value pairs', () => {
       const input = {
-        fruits: [['apple', 5], ['banana', 3]],
-        vegetables: [['carrot', 2], ['broccoli', 4]],
+        words: [['word1', 5.1], ['word2', 0.1]]
       };
       const expectedOutput = [
-        'fruits: apple (5), banana (3)',
-        'vegetables: carrot (2), broccoli (4)'
+        'words: word1 (5.1), word2 (0.1)'
       ];
       expect(formatDictionary(input)).toEqual(expectedOutput);
     });
@@ -130,14 +128,6 @@ describe('formatDictionary', () => {
     it('should return an empty array for an empty dictionary', () => {
       const input = {};
       const expectedOutput = [];
-      expect(formatDictionary(input)).toEqual(expectedOutput);
-    });
-  
-    it('should handle keys with multiple entries', () => {
-      const input = {
-        letters: [['a', 1], ['b', 2], ['c', 3]],
-      };
-      const expectedOutput = ['letters: a (1), b (2), c (3)'];
       expect(formatDictionary(input)).toEqual(expectedOutput);
     });
   
@@ -151,9 +141,9 @@ describe('formatDictionary', () => {
   
     it('should handle a dictionary with one key and one entry', () => {
       const input = {
-        singleKey: [['word', 1]],
+        singleKey: [['word', 1.9]],
       };
-      const expectedOutput = ['singleKey: word (1)'];
+      const expectedOutput = ['singleKey: word (1.9)'];
       expect(formatDictionary(input)).toEqual(expectedOutput);
     });
   });

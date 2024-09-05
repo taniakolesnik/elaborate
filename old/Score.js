@@ -1,4 +1,4 @@
-import { getData, setData } from './asyncStorage';
+import { getData, setData } from '../asyncStorage';
 
 export const getScore = async () => {
     try {
