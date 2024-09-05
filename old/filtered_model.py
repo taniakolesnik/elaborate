@@ -18,9 +18,12 @@ def save_glove_model(model, file_path):
             vec_str = ' '.join(map(str, vec))
             f.write(f"{word} {vec_str}\n")
 
+
+
 def main():
-    glove_file_path = "/Users/tetianakolesnik/Downloads/glove.6B/glove.6B.100d.txt"
-    filtered_glove_file_path = "/Users/tetianakolesnik/Downloads/glove.6B/glove.6B.100d.filtered.txt"
+    glove_file_path = "/Users/tetianakolesnik/Downloads/glove.6B/glove.6B.300d.txt"
+    filtered_glove_file_path = "/Users/tetianakolesnik/Downloads/glove.6B.100d.filtered.txt"
+    secret_words_path = "/Users/tetianakolesnik/Downloads/secret_words.txt"
     
     # Load the original GloVe model
     model = load_glove_model(glove_file_path)
@@ -31,6 +34,12 @@ def main():
     # Save the filtered model to a new file
     save_glove_model(filtered_model, filtered_glove_file_path)
     print(f"Filtered GloVe model saved to {filtered_glove_file_path}")
+
+    # Get the first 100 words (just the words, not vectors)
+    words = get_first_words(model, 100)
+    
+    # Save the first 100 words to a file
+    save_words_to_file(words, secret_words_path)
 
 if __name__ == "__main__":
     main()

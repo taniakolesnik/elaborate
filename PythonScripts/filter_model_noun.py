@@ -23,6 +23,15 @@ def get_noun_embeddings(glove_embeddings):
     }
     return noun_embeddings
 
+def get_first_words(model, number):
+    words = list(model.keys())[:number]  # Get the first 100 words
+    return words
+
+def save_words_to_file(words, file_path):
+    with open(file_path, 'w', encoding='utf-8') as f:
+        for word in words:
+            f.write(f"{word}\n")
+
 def load_glove_model(file_path):
     model = {}
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -49,4 +58,8 @@ filtered_model = filter_five_letter_words(model)
 filtered_model_noun = get_noun_embeddings(filtered_model)
 
 # Save the filtered model
-save_glove_model(filtered_model_noun, '/Users/tetianakolesnik/Downloads/glove.6B/glove.6B.300d.5.noun.txt')
+save_glove_model(filtered_model_noun, '/Users/tetianakolesnik/Downloads/glove.6B.300d.5.noun.txt')
+
+# Get the first n words (just the words, not vectors)
+words = get_first_words(filtered_model_noun, 100)
+save_words_to_file(words, '/Users/tetianakolesnik/Downloads/secret_words.txt')

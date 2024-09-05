@@ -16,7 +16,6 @@ const Game = ({ newGameStart, onNewGameClick }) => {
   const [errorMessage, setErrorMessage] = useState(''); // Error message for invalid input or connection issues.
   const flatList = React.useRef(null) // Reference to the FlatList for scrolling.
   const fadeErrorAnimation = useRef(new Animated.Value(0)).current; // Animation for error messages.
-
   const [rulesWindowVisible, setRulesWindowVisible] = useState(false); // State to control rules modal visibility.
 
   // initialize secret word and best score when component mounts.
@@ -204,8 +203,8 @@ const Game = ({ newGameStart, onNewGameClick }) => {
         color="black"/>
       </View>
 
-                    {/* Rules modal */}
-                    <Modal
+          {/* Rules modal */}
+          <Modal
           animationType="fade"
           transparent={true}
           visible={rulesWindowVisible}
