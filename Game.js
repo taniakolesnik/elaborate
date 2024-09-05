@@ -2,108 +2,118 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Animated, FlatList, ActivityIndicator, Modal, StyleSheet, TextInput, Text, View, Button, Pressable } from 'react-native';
 import {getRandomWord, getCommon, validateInput, formatDictionary} from './gameUtils'
 import { getData, setData } from './asyncStorage';
-import { rules } from './gameRules';
+import { rules, objective } from './gameRules';
 
 const Game = ({ newGameStart, onNewGameClick }) => {
 
-  const [attempts, setAttempts] = useState(0);
-  const [guessList, setGuessList] = useState({});
-  const [inputGuess, setInputGuess] = useState('');
-  const [isDisabledSendButton, setIsDisabledSendButton] = useState(true);
-  const [isEnabledActivityIndicator, setIsEnabledActivityIndicator] = useState(false);
-  const [secretWord, setSecretWord] = useState('');
-  const [bestScore, setBestScore] = useState(100);
-  const [errorMessage, setErrorMessage] = useState('');
-  const flatList = React.useRef(null)
-  const fadeErrorAnimation = useRef(new Animated.Value(0)).current;
+  const [attempts, setAttempts] = useState(0); // Tracks the number of guesses attempts.
+  const [guessList, setGuessList] = useState({}); // Stores users guesses words and feedback on them.
+  const [inputGuess, setInputGuess] = useState(''); // Tracks current user input.
+  const [isDisabledSendButton, setIsDisabledSendButton] = useState(true); // Manages submit button state.
+  const [isEnabledActivityIndicator, setIsEnabledActivityIndicator] = useState(false); // Shows loading indicator during API call.
+  const [secretWord, setSecretWord] = useState(''); // Stores the secret word.
+  const [bestScore, setBestScore] = useState(100); // Tracks the best score (fewest attempts).
+  const [errorMessage, setErrorMessage] = useState(''); // Error message for invalid input or connection issues.
+  const flatList = React.useRef(null) // Reference to the FlatList for scrolling.
+  const fadeErrorAnimation = useRef(new Animated.Value(0)).current; // Animation for error messages.
 
-  const [rulesWindowVisible, setRulesWindowVisible] = useState(false);
-  const objective = "Guess the secret English 5-letter word."  
+  const [rulesWindowVisible, setRulesWindowVisible] = useState(false); // State to control rules modal visibility.
 
-
+  // initialize secret word and best score when component mounts.
   useEffect(() => {
-    getSecretWord();
-    getBestScore();
+    getSecretWord(); // Fetch a new secret word on load.
+    getBestScore(); // Load the best score from async storage.
   }, []);
 
+  // Fetches a random word from the backend and handles connection issues.
   const getSecretWord = async () => {
     try {
       const response = await getRandomWord();
       if (response == "error") {
-        setErrorMessage("No connection to the server. Please try later.");
-        fadeIn()
-        setSecretWord("NO_CONNECTION")
+        setErrorMessage("No connection to the server. Please try later."); // Show error if connection fails.
+        fadeIn() // Trigger fade-in animation for error message.
+        setSecretWord("NO_CONNECTION") // Set a placeholder secret word when there's no connection.
       } else {
-        setSecretWord(response)
-        await setData("secretWord", response)
+        setSecretWord(response) // Set secret word from backend.
+        await setData("secretWord", response) // Store secret word in async storage.
       }
     } catch (error) {
       console.error('Error in setRandomWord:', error);
     }
   };
 
+  // Retrieves the best score from async storage and sets it in state.
   const getBestScore = async () => {
     try {
       const response = await getData("bestScore");
       if (response !== null) {
-        setBestScore(response)
+        setBestScore(response) // Set best score if it exists in storage.
       } 
     } catch (error) {
       console.error('Error in getBestScore:', error);
     }
   };
 
+  // Handles user input and disables the submit button if the input is invalid.
   const handleInputChange = (input) => {
     if (secretWord != "NO_CONNECTION"){
-      fadeOut();
+      fadeOut(); // Hide error message when input changes.
     } 
+    const inputLowerCase = input.toLowerCase() // Convert input to lowercase for consistency.
+    setInputGuess(inputLowerCase) // Update state with the input.
 
-    const inputLowerCase = input.toLowerCase()
-    setInputGuess(inputLowerCase)
+    // Validate the input and enable/disable the submit button accordingly.
     if (validateInput(inputLowerCase) && secretWord != "NO_CONNECTION") {
-      setIsDisabledSendButton(false);
+      setIsDisabledSendButton(false);  // Enable button if input is valid.
     } else {
-      setIsDisabledSendButton(true);
+      setIsDisabledSendButton(true); // Disable button if input is invalid.
     }
   };
 
+
+  // Handles the submission of the player's guess and checks the result.
   const checkGuessInput = async () => {
-    setIsEnabledActivityIndicator(true);
-    setIsDisabledSendButton(true)
+    setIsEnabledActivityIndicator(true); // Show loading indicator during API call.
+    setIsDisabledSendButton(true) // Disable submit button to prevent duplicate submissions.
     if (secretWord == inputGuess) {
-      newGameStart();
-      setData("bestScore", String(attempts))
+      newGameStart(); // Start a new game if the guess is correct.
+      if ((attempts + 1) < bestScore){
+        setData("bestScore", String(attempts+1))  // Update the best score 
+      }
     } else if (inputGuess in guessList) {
-      setInputGuess("");
-      setErrorMessage("This guess word was already used")
-      fadeIn()
+      setInputGuess(""); // Clear input if the guess was already used.
+      setErrorMessage("This guess word was already used") // Show error message.
+      fadeIn() // Trigger fade-in animation for error message.
     } else {
-      const response = await getCommon(inputGuess, secretWord);
+      const response = await getCommon(inputGuess, secretWord); // Compare guess with secret word via backend API.
       if (response == "One or both words not in vocabulary") {
-        setInputGuess("");
-        setErrorMessage("Cannot find this word in my vocabulary.")
-        fadeIn()
+        setInputGuess(""); // Clear input if word is not in vocabulary.
+        setErrorMessage("Cannot find this word in my vocabulary.") // Show error message.
+        fadeIn() // Trigger fade-in animation.
       } else if (response == "error") {
-          setInputGuess("");
-          setErrorMessage("No connection to the server. Please try later")
-          fadeIn()
+          setInputGuess(""); // Clear input on connection error.
+          setErrorMessage("No connection to the server. Please try later") // Show connection error.
+          fadeIn() // Trigger fade-in animation.
       } else {
-        gustListUpdated = guessList
-        gustListUpdated[inputGuess] = response
-        setGuessList(gustListUpdated)
-        setAttempts(attempts + 1)
-        setInputGuess("");
+        gustListUpdated = guessList // Update guess list with the new guess.
+        gustListUpdated[inputGuess] = response // Add response from backend.
+        setGuessList(gustListUpdated) // Set updated guess list in state.
+        setAttempts(attempts+1) // Increment attempts.
+        setInputGuess("");  // Clear input for the next guess.
       }
     }
-    setIsEnabledActivityIndicator(false);
+    setIsEnabledActivityIndicator(false); // Hide loading indicator.
   };
 
+  // Renders each guessed word in the FlatList.
   const renderItem = ({ item }) => (
     <View style={styles.guessItemStyle}>
       <Text style={styles.guessTextStyle}>{item}</Text>
     </View>
   );
 
+  // Triggers the fade-in animation for error messages.
+  // code is taken from https://reactnative.dev/docs/animations
   const fadeIn = () => {
     Animated.timing(fadeErrorAnimation, {
       toValue: 1,
@@ -112,6 +122,8 @@ const Game = ({ newGameStart, onNewGameClick }) => {
     }).start();
   };
 
+  // Triggers the fade-out animation for error messages.
+  // code is taken from https://reactnative.dev/docs/animations
   const fadeOut = () => {
     Animated.timing(fadeErrorAnimation, {
       toValue: 0,
@@ -120,6 +132,7 @@ const Game = ({ newGameStart, onNewGameClick }) => {
     }).start();
   };
 
+  // Opens the rules modal when the "Rules" button is pressed.
   const showRules = () => {
     setRulesWindowVisible(true)
   };
@@ -127,13 +140,17 @@ const Game = ({ newGameStart, onNewGameClick }) => {
   return (
     <View style={styles.container}>
     <View style={styles.topView}>
+      {/* rules button*/}
       <View style={styles.topViewClicable}>
         <Pressable onPress={showRules}>
           <Text style={styles.topViewSmall}>Rules</Text>
         </Pressable>
         </View>
+        {/* the best score */}
         <Text style={styles.topViewSmall}>best# {bestScore}</Text>
+        {/* number of attempts */}
         <Text style={styles.topViewLarge}>attempts# {attempts}</Text>
+        {/* give up button */}
         <View style={styles.topViewClicable}>
         <Pressable onPress={onNewGameClick}>
           <Text style={styles.topViewSmall}>Give Up</Text>
@@ -142,6 +159,7 @@ const Game = ({ newGameStart, onNewGameClick }) => {
       </View>
 
 
+      {/* List of guessed words */}
       <FlatList
         ref={flatList}
         data={formatDictionary(guessList)}
@@ -153,14 +171,18 @@ const Game = ({ newGameStart, onNewGameClick }) => {
         }}
       />
 
+      {/* Animated error message */}
       <Animated.View
         style={{ opacity: fadeErrorAnimation, alignItems: 'left', marginHorizontal: 1 }}>
         <Text style={styles.guessInputHelperTextErorr}>{errorMessage}</Text>
       </Animated.View>
 
+      {/* Input helper text */}
       <View style={styles.guessInputHelperView}>
         <Text style={styles.guessInputHelperText}>Submit button is only activated when your guess input is exactly 5 characters long. No spaces or special characters are permitted.</Text>
       </View>
+
+      {/* User input field for guessing */}
       <TextInput
         style={styles.inputStyle}
         placeholder="Type your guess here"
@@ -169,6 +191,7 @@ const Game = ({ newGameStart, onNewGameClick }) => {
         onChangeText={handleInputChange}
       />
 
+      {/* Submit button and activity indicator */}
       <View style={styles.submitButtonViewStyle}>
         <Button color="#333a40" style={styles.button}
         disabled={isDisabledSendButton}
