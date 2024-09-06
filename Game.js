@@ -191,14 +191,14 @@ const Game = ({ newGameStart, onNewGameClick }) => {
       />
 
       {/* Submit button and activity indicator */}
+
       <View style={styles.submitButtonViewStyle}>
-        <Button color="#333a40" style={styles.button}
-        disabled={isDisabledSendButton}
-        title="Submit" 
-        onPress={checkGuessInput} />
+        <Pressable onPress={checkGuessInput} style={{marginHorizontal:10}}>
+          <Text style={isDisabledSendButton ? styles.disabledButton: styles.button}>Submit</Text>
+        </Pressable>
+
       <ActivityIndicator 
         animating={isEnabledActivityIndicator} 
-        // animating='true'
         size="small" 
         color="black"/>
       </View>
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    top: 10
+    top: 10,
   },
   topView: {
     flexDirection: 'row',
@@ -313,11 +313,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 14
   },
   submitButtonViewStyle: {
-    borderRadius: 10,
+    borderRadius: 6,
     overflow: 'hidden',
     marginHorizontal: 12,
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   modalText: {
     marginBottom: 15,
@@ -355,10 +355,19 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 10,
+    color: 'white',
     padding: 10,
     elevation: 2,
-    backgroundColor: '#FEFEFE'
-  },  
+    marginBottom: 3,
+    backgroundColor: '#1e1e1e'
+  }, 
+  disabledButton: {
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 3,
+    elevation: 1,
+    backgroundColor: '#c7cdd2'
+  }, 
   textStyle: {
     color: '#1e1e1e',
     textAlign: 'center',
