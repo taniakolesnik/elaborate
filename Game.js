@@ -218,7 +218,7 @@ const Game = ({ newGameStart, onNewGameClick }) => {
               <Text style={styles.modalTextHeaders}>Gameplay:</Text>
               <Text style={styles.modalText}>{rules}</Text>
               <Pressable
-                style={[styles.button, styles.buttonClose]}
+                style={[styles.buttonClose]}
                 onPress={() => setRulesWindowVisible(false)}>
                 <Text style={styles.textStyle}>Close</Text>
               </Pressable>
@@ -360,6 +360,13 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginBottom: 3,
     backgroundColor: '#1e1e1e'
+  }, 
+  buttonClose: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    marginBottom: 3,
+    backgroundColor: 'white'
   }, 
   disabledButton: {
     borderRadius: 10,
